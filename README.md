@@ -1,5 +1,5 @@
 # AposGameCheatSheet
-MonoGame project starter. Common files to help creating a game faster.
+MonoGame project starter. Common files to help create a game faster.
 
 # Goal
 This project will include features like:
