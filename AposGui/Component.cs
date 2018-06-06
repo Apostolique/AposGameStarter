@@ -15,6 +15,7 @@ namespace AposGameCheatSheet.AposGui
     ///       to how to handle inputs.
     /// </summary>
     class Component
+    {
         public Component() {
             Position = new Point(0, 0);
             Width = 100;
