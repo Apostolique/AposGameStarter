@@ -15,6 +15,12 @@ namespace AposGameCheatSheet.AposGui
     /// </summary>
     class Button : Component
     {
+        public Button() : this(new Component()) {
+        }
+        public Button(Component iItem) {
+            Item = iItem;
+            buttonActions = new List<ButtonConditionAction>();
+        }
         struct ButtonConditionAction {
             public Func<bool> condition;
             public Action<Button> buttonAction;
@@ -23,29 +29,36 @@ namespace AposGameCheatSheet.AposGui
                 buttonAction = iButtonAction;
             }
         }
-
-        public Component item;
+        public Component Item {
+            get; set;
+        }
         public bool isHovered = false;
         public bool showBox = true;
         private List<ButtonConditionAction> buttonActions;
-        public Button() {
-            item = new Component();
-            buttonActions = new List<ButtonConditionAction>();
+
+        public override Point Position {
+            get => base.Position;
+            set {
+                base.Position = value;
+                Item.Position = base.Position;
+            }
         }
-        public Button(Component iItem) {
-            item = iItem;
-            buttonActions = new List<ButtonConditionAction>();
+        public override int Width {
+            get => base.Width;
+            set {
+                base.Width = value;
+                Item.Width = base.Width;
+            }
+        }
+        public override int Height {
+            get => base.Height;
+            set {
+                base.Height = value;
+                Item.Height = base.Height;
+            }
         }
         public void AddAction(Func<bool> condition, Action<Button> bAction) {
             buttonActions.Add(new ButtonConditionAction(condition, bAction));
-        }
-        public void setItem(Component iItem) {
-            item = iItem;
-        }
-        public override void UpdateSetup() {
-            item.Position = Position;
-            item.Width = Width;
-            item.Height = Height;
         }
         public override bool UpdateInput() {
             isHovered = IsInside(new Point(Utility.Input.NewMouse.X, Utility.Input.NewMouse.Y));
@@ -72,7 +85,7 @@ namespace AposGameCheatSheet.AposGui
                 }
             }
 
-            item.Draw(s, clipRect);
+            Item.Draw(s, clipRect);
 
             if (showBox && isHovered) {
                 s.DrawLine(Left, Top, Left, Bottom, Color.White, 2);
@@ -81,8 +94,8 @@ namespace AposGameCheatSheet.AposGui
                 s.DrawLine(Left, Bottom, Right, Bottom, Color.White, 2);
             }
         }
-        public override int PrefWidth => item.PrefWidth;
-        public override int PrefHeight => item.PrefHeight;
+        public override int PrefWidth => Item.PrefWidth;
+        public override int PrefHeight => Item.PrefHeight;
 
         public void setBox(bool iBox) {
             showBox = iBox;
