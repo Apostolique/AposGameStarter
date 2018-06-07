@@ -30,16 +30,21 @@ namespace AposGameCheatSheet.AposGui
                 int cMarginHeight = c.PrefHeight;
                 canvasHeight += cMarginHeight;
             }
+
             int canvasOffsetY = halfHeight - canvasHeight / 2;
             int offsetY = position.Y;
             foreach (Component c in children) {
-                int cMarginHeight = c.PrefHeight;
-                int componentHalfWidth = c.PrefWidth / 2;
                 int cWidth = c.PrefWidth;
+                int componentHalfWidth = cWidth / 2;
+                int cHeight = c.PrefHeight;
                 c.Width = cWidth;
-                c.Height = cMarginHeight;
-                c.Position = new Point(position.X + halfWidth - componentHalfWidth, offsetY + canvasOffsetY) + Panel.Offset;
-                offsetY += cMarginHeight;
+                c.Height = cHeight;
+                if (canvasHeight < height) {
+                    c.Position = new Point(position.X + halfWidth - componentHalfWidth, offsetY + canvasOffsetY) + Panel.Offset;
+                } else {
+                    c.Position = new Point(position.X + halfWidth - componentHalfWidth, offsetY) + Panel.Offset;
+                }
+                offsetY += cHeight;
             }
             Panel.Size = new Size2(width, offsetY);
         }
