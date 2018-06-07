@@ -16,7 +16,7 @@ namespace AposGameCheatSheet.AposGui
     {
         public Layout() {
         }
-        public Panel Panel {
+        public virtual Panel Panel {
             get; set;
         }
         public virtual void RecomputeChildren(List<Component> children) {

@@ -17,13 +17,33 @@ namespace AposGameCheatSheet.AposGui
     {
         public LayoutVerticalCenter() {
         }
+        private int _oldWidth;
+        private int _oldHeigth;
+        private int _newWidth;
+        private int _newHeight;
+
+        public override Panel Panel {
+            get => base.Panel;
+            set {
+                base.Panel = value;
+                _newWidth = base.Panel.Width;
+                _newHeight = base.Panel.Height;
+            }
+        }
         public override void RecomputeChildren(List<Component> children) {
             //Tell each children their position and size.
+            _oldWidth = _newWidth;
+            _oldHeigth = _newHeight;
+            _newWidth = Panel.Width;
+            _newHeight = Panel.Height;
+
+            if (_oldWidth != _newWidth || _oldHeigth != _newHeight) {
+                Panel.Offset = new Point(0, 0);
+            }
+
             Point position = Panel.Position;
-            int width = Panel.Width;
-            int height = Panel.Height;
-            int halfWidth = width / 2;
-            int halfHeight = height / 2;
+            int halfWidth = _newWidth / 2;
+            int halfHeight = _newHeight / 2;
 
             int canvasHeight = 0;
             foreach (Component c in children) {
@@ -39,14 +59,14 @@ namespace AposGameCheatSheet.AposGui
                 int cHeight = c.PrefHeight;
                 c.Width = cWidth;
                 c.Height = cHeight;
-                if (canvasHeight < height) {
+                if (canvasHeight < _newHeight) {
                     c.Position = new Point(position.X + halfWidth - componentHalfWidth, offsetY + canvasOffsetY) + Panel.Offset;
                 } else {
                     c.Position = new Point(position.X + halfWidth - componentHalfWidth, offsetY) + Panel.Offset;
                 }
                 offsetY += cHeight;
             }
-            Panel.Size = new Size2(width, offsetY);
+            Panel.Size = new Size2(_oldWidth, offsetY);
         }
     }
 }
