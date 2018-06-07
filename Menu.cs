@@ -112,8 +112,9 @@ namespace AposGameCheatSheet
             return quitMenu;
         }
         public void UpdateSetup() {
-            Panel currentPanel = menus[currentMenu];
-            currentPanel.UpdateSetup();
+            foreach (KeyValuePair<MenuScreens, Panel> kvp in menus) {
+                kvp.Value.UpdateSetup();
+            }
         }
         public void UpdateInput() {
             Panel currentPanel = menus[currentMenu];
