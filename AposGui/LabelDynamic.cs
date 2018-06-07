@@ -19,7 +19,14 @@ namespace AposGameCheatSheet.AposGui
             text = iText;
         }
         Func<string> text;
-        Size2 textSize => Assets.bitFont.MeasureString(text());
+        Size2 textSize {
+            get {
+                if (text != null) {
+                    return Assets.bitFont.MeasureString(text());
+                }
+                return Size2.Empty;
+            }
+        }
         public override void Draw(SpriteBatch s, Rectangle clipRect) {
             Draw(s, clipRect, Color.White);
         }
