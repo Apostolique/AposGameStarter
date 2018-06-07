@@ -1,4 +1,5 @@
-﻿using AposGameCheatSheet.AposGui;
+﻿using System;
+using AposGameCheatSheet.AposGui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -27,6 +28,7 @@ namespace AposGameCheatSheet
             Utility.Input = new Input();
 
             Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += WindowClientChanged;
 
             base.Initialize();
         }
@@ -38,6 +40,9 @@ namespace AposGameCheatSheet
             // TODO: use this.Content to load your game content here
             Assets.LoadAssets(Content);
             menu = new Menu();
+        }
+
+        private void WindowClientChanged(object sender, EventArgs e) {
         }
 
         protected override void Update(GameTime gameTime)
