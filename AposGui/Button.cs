@@ -40,21 +40,27 @@ namespace AposGameCheatSheet.AposGui
             get => base.Position;
             set {
                 base.Position = value;
-                Item.Position = base.Position;
+                if (Item != null) {
+                    Item.Position = base.Position;
+                }
             }
         }
         public override int Width {
             get => base.Width;
             set {
                 base.Width = value;
-                Item.Width = base.Width;
+                if (Item != null) {
+                    Item.Width = base.Width;
+                }
             }
         }
         public override int Height {
             get => base.Height;
             set {
                 base.Height = value;
-                Item.Height = base.Height;
+                if (Item != null) {
+                    Item.Height = base.Height;
+                }
             }
         }
         public void AddAction(Func<bool> condition, Action<Button> bAction) {
