@@ -70,12 +70,8 @@ namespace AposGameCheatSheet
             return mp;
         }
         private Panel setupDebugMenu() {
-            Panel debugMenu = new ScreenPanel();
-
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
-
-            debugMenu.Add(mp);
 
             Label l1 = new Label("Debug");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
@@ -89,7 +85,7 @@ namespace AposGameCheatSheet
                 currentMenu = MenuScreens.Main;
             }));
             
-            return debugMenu;
+            return mp;
         }
         private Panel setupQuitConfirm() {
             Panel quitMenu = new ScreenPanel();
