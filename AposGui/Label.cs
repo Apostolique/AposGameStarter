@@ -23,8 +23,8 @@ namespace AposGameCheatSheet.AposGui
         public Label(string iText) {
             text = iText;
             textSize = Assets.bitFont.MeasureString(text);
-            Width = (int)textSize.Width;
-            Height = (int)textSize.Height;
+            Width = PrefWidth;
+            Height = PrefHeight;
         }
         public override void Draw(SpriteBatch s, Rectangle clipRect) {
             Draw(s, clipRect, Color.White);
