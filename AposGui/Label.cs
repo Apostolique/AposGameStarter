@@ -18,11 +18,7 @@ namespace AposGameCheatSheet.AposGui
     {
         string text;
         Size2 textSize;
-        public Label() {
-            text = "Text Missing";
-            textSize = Assets.bitFont.MeasureString(text);
-            Width = (int)textSize.Width;
-            Height = (int)textSize.Height;
+        public Label() : this("Text Missing") {
         }
         public Label(string iText) {
             text = iText;
