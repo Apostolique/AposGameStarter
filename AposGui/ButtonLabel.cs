@@ -7,6 +7,9 @@ using MonoGame.Extended;
 
 namespace AposGameCheatSheet.AposGui
 {
+    /// <summary>
+    /// Goal: A button that contains some text.
+    /// </summary>
     class ButtonLabel : Button
     {
         public ButtonLabel() {

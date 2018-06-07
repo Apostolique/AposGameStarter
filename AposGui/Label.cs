@@ -12,7 +12,7 @@ using MonoGame.Extended.BitmapFonts;
 namespace AposGameCheatSheet.AposGui
 {
     /// <summary>
-    /// Goal: A button that displays itself horizontally.
+    /// Goal: A text component.
     /// </summary>
     class Label : Component
     {

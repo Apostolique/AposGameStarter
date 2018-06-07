@@ -11,7 +11,7 @@ using MonoGame.Extended;
 namespace AposGameCheatSheet.AposGui
 {
     /// <summary>
-    /// Goal: A button that displays itself horizontally.
+    /// Goal: A button component that handles actions.
     /// </summary>
     class Button : Component
     {
