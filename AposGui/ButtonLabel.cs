@@ -13,13 +13,13 @@ namespace AposGameCheatSheet.AposGui
     class ButtonLabel : Button
     {
         public ButtonLabel() {
-            item = new Label();
+            Item = new Label();
         }
         public ButtonLabel(string text) {
-            item = new Label(text);
+            Item = new Label(text);
         }
         public ButtonLabel(Label text) {
-            item = text;
+            Item = text;
         }
         public override void Draw(SpriteBatch s, Rectangle clipRect) {
             clipRect = ClipRectangle(clipRect);
@@ -33,9 +33,9 @@ namespace AposGameCheatSheet.AposGui
             }
 
             if (showBox || isHovered) {
-                item.Draw(s, clipRect);
+                Item.Draw(s, clipRect);
             } else {
-                ((Label)item).Draw(s, clipRect, new Color(150, 150, 150));
+                ((Label)Item).Draw(s, clipRect, new Color(150, 150, 150));
             }
 
             if (showBox && isHovered) {
