@@ -26,6 +26,8 @@ namespace AposGameCheatSheet
             Utility.Window = Window;
             Utility.Input = new Input();
 
+            Window.AllowUserResizing = true;
+
             base.Initialize();
         }
 
