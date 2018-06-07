@@ -17,7 +17,7 @@ namespace AposGameCheatSheet.AposGui
     {
         public Panel() {
             children = new List<Component>();
-            Layout = null;
+            Layout = new Layout();
             Offset = new Point(0, 0);
             Size = new Size2(0, 0);
         }
