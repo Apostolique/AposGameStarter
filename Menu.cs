@@ -39,9 +39,8 @@ namespace AposGameCheatSheet
             mp.Layout = new LayoutVerticalCenter();
 
             Label l1 = new Label("AposGameCheatSheet");
-
-            mp.Add(l1);
-
+            Border l1Border = new Border(l1, 30, 30, 30, 50);
+            mp.Add(l1Border);
 
             mp.Add(createButtonLabel("Resume Game", leftClick, delegate(Button b) {
             }));
@@ -62,8 +61,8 @@ namespace AposGameCheatSheet
             mp.Layout = new LayoutVerticalCenter();
 
             Label l1 = new Label("Settings");
-
-            mp.Add(l1);
+            Border l1Border = new Border(l1, 30, 30, 30, 50);
+            mp.Add(l1Border);
             mp.Add(createButtonLabel("Back", leftClick, delegate(Button b) {
                 currentMenu = MenuScreens.Main;
             }));
@@ -79,8 +78,8 @@ namespace AposGameCheatSheet
             debugMenu.Add(mp);
 
             Label l1 = new Label("Debug");
-
-            mp.Add(l1);
+            Border l1Border = new Border(l1, 30, 30, 30, 50);
+            mp.Add(l1Border);
             mp.Add(createButtonLabelDynamic(delegate() {
                 return "Show path line: " + (Utility.showLine ? "true" : "false");
             }, leftClick, delegate(Button b) {
@@ -101,8 +100,8 @@ namespace AposGameCheatSheet
             quitMenu.Add(mp);
 
             Label l1 = new Label("Do you really want to quit?");
-
-            mp.Add(l1);
+            Border l1Border = new Border(l1, 30, 30, 30, 50);
+            mp.Add(l1Border);
             mp.Add(createButtonLabel("Yes", leftClick, delegate(Button b) {
                 Utility.game.Exit();
             }));
@@ -128,29 +127,37 @@ namespace AposGameCheatSheet
             Panel currentPanel = menus[currentMenu];
             currentPanel.Draw(s, new Rectangle(0, 0, Utility.WindowWidth, Utility.WindowHeight));
         }
-        private Button createButtonLabel(string text, Func<bool> c, Action<Button> a) {
+        private Component createButtonLabel(string text, Func<bool> c, Action<Button> a) {
             Button b = new ButtonLabel(text);
             b.setBox(false);
             b.AddAction(c, a);
-            return b;
+
+            Border border = new Border(b, 20, 20, 20, 20);
+            return border;
         }
-        private Button createButtonLabel(string text) {
+        private Component createButtonLabel(string text) {
             Button b = new ButtonLabel(text);
             b.setBox(false);
-            return b;
+
+            Border border = new Border(b, 20, 20, 20, 20);
+            return border;
         }
-        private Button createButtonLabelDynamic(Func<string> text, Func<bool> c,  Action<Button> a) {
+        private Component createButtonLabelDynamic(Func<string> text, Func<bool> c,  Action<Button> a) {
             LabelDynamic ld = new LabelDynamic(text);
             Button b = new ButtonLabel(ld);
             b.setBox(false);
             b.AddAction(c, a);
-            return b;
+
+            Border border = new Border(b, 20, 20, 20, 20);
+            return border;
         }
-        private Button createButtonLabelDynamic(Func<string> text) {
+        private Component createButtonLabelDynamic(Func<string> text) {
             LabelDynamic ld = new LabelDynamic(text);
             Button b = new ButtonLabel(ld);
             b.setBox(false);
-            return b;
+
+            Border border = new Border(b, 20, 20, 20, 20);
+            return border;
         }
         private class MenuPanel : PanelVerticalScroll {
             public MenuPanel() {
