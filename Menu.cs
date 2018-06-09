@@ -140,7 +140,11 @@ namespace AposGameCheatSheet
                 currentPanel.focus = currentPanel.findPrevious(currentPanel.focus);
             }
             if (gamePadBClick()) {
-                selectMenu(MenuScreens.Main);
+                if (currentMenu == MenuScreens.Main) {
+                    selectMenu(MenuScreens.Quit);
+                } else {
+                    selectMenu(MenuScreens.Main);
+                }
             }
 
             bool usedInput = currentPanel.component.UpdateInput();
