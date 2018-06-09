@@ -15,7 +15,7 @@ namespace AposGameCheatSheet
     class Menu
     {
         public Menu() {
-            menus = new Dictionary<MenuScreens, Panel>();
+            menus = new Dictionary<MenuScreens, ComponentFocus>();
             menus.Add(MenuScreens.Main, setupMainMenu());
             menus.Add(MenuScreens.Settings, setupSettingsMenu());
             menus.Add(MenuScreens.Debug, setupDebugMenu());
@@ -29,9 +29,8 @@ namespace AposGameCheatSheet
             Debug,
             Quit
         }
-        Dictionary<MenuScreens, Panel> menus;
+        Dictionary<MenuScreens, ComponentFocus> menus;
         MenuScreens currentMenu;
-        Component focus;
 
         Func<Button, bool> leftClick = (Button b) => b.isHovered && Utility.Input.OldMouse.LeftButton == ButtonState.Released && Utility.Input.NewMouse.LeftButton == ButtonState.Pressed;
         Func<Button, bool> gamePadAClick = (Button b) => b.HasFocus && Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasAButton && Utility.Input.OldGamePad.Buttons.A == ButtonState.Released && Utility.Input.NewGamePad.Buttons.A == ButtonState.Pressed;
@@ -39,7 +38,7 @@ namespace AposGameCheatSheet
         Func<bool> nextFocusAction = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasLeftStickButton && Utility.Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Utility.Input.NewGamePad.ThumbSticks.Left.Y < 0;
         Func<bool> gamePadBClick = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasBButton && Utility.Input.OldGamePad.Buttons.B == ButtonState.Released && Utility.Input.NewGamePad.Buttons.B == ButtonState.Pressed;
 
-        private Panel setupMainMenu() {
+        private ComponentFocus setupMainMenu() {
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
 
@@ -58,10 +57,10 @@ namespace AposGameCheatSheet
             mp.Add(createButtonLabel("Quit", delegate(Button b) {
                 selectMenu(MenuScreens.Quit);
             }));
-            
-            return mp;
+
+            return new ComponentFocus(mp);
         }
-        private Panel setupSettingsMenu() {
+        private ComponentFocus setupSettingsMenu() {
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
 
@@ -72,9 +71,9 @@ namespace AposGameCheatSheet
                 selectMenu(MenuScreens.Main);
             }));
 
-            return mp;
+            return new ComponentFocus(mp);
         }
-        private Panel setupDebugMenu() {
+        private ComponentFocus setupDebugMenu() {
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
 
@@ -90,9 +89,9 @@ namespace AposGameCheatSheet
                 selectMenu(MenuScreens.Main);
             }));
             
-            return mp;
+            return new ComponentFocus(mp);
         }
-        private Panel setupQuitConfirm() {
+        private ComponentFocus setupQuitConfirm() {
             Panel quitMenu = new ScreenPanel();
 
             MenuPanel mp = new MenuPanel();
@@ -110,91 +109,38 @@ namespace AposGameCheatSheet
                 selectMenu(MenuScreens.Main);
             }));
 
-            return quitMenu;
+            return new ComponentFocus(quitMenu);
         }
         private void selectMenu(MenuScreens ms) {
-            if (focus != null) {
-                focus.HasFocus = false;
-            }
-
             currentMenu = ms;
-            Component possibleFocus = findFinal(menus[ms]);
-            if (possibleFocus.CanFocus) {
-                focus = possibleFocus;
-                focus.HasFocus = true;
-            } else {
-                focus = findNext(possibleFocus);
-            }
         }
-        private Component findPrevious(Component c) {
-            if (c != null) {
-                Component currentFocus = c;
-                currentFocus.HasFocus = false;
 
-                do {
-                    currentFocus = currentFocus.GetPrevious();
-                    currentFocus = findFinal(currentFocus);
-                } while (!currentFocus.CanFocus && currentFocus != c);
-
-                if (currentFocus.CanFocus) {
-                    currentFocus.HasFocus = true;
-                    return currentFocus;
-                }
-            }
-            return null;
-        }
-        private Component findNext(Component c) {
-            if (c != null) {
-                Component currentFocus = c;
-                currentFocus.HasFocus = false;
-
-                do {
-                    currentFocus = currentFocus.GetNext();
-                    currentFocus = findFinal(currentFocus);
-                } while (!currentFocus.CanFocus && currentFocus != c);
-
-                if (currentFocus.CanFocus) {
-                    currentFocus.HasFocus = true;
-                    return currentFocus;
-                }
-            }
-            return null;
-        }
-        private Component findFinal(Component c) {
-            Component previousFinal;
-            Component currentFinal = c;
-            do {
-                previousFinal = currentFinal;
-                currentFinal = previousFinal.GetFinal();
-            } while (currentFinal != previousFinal && currentFinal != c);
-
-            return currentFinal;
-        }
         public void UpdateSetup() {
-            foreach (KeyValuePair<MenuScreens, Panel> kvp in menus) {
-                kvp.Value.UpdateSetup();
+            foreach (KeyValuePair<MenuScreens, ComponentFocus> kvp in menus) {
+                kvp.Value.component.UpdateSetup();
             }
         }
         public void UpdateInput() {
+            ComponentFocus currentPanel = menus[currentMenu];
+
             if (nextFocusAction()) {
-                focus = findNext(focus);
+                currentPanel.focus = currentPanel.findNext(currentPanel.focus);
             }
             if (previousFocusAction()) {
-                focus = findPrevious(focus);
+                currentPanel.focus = currentPanel.findPrevious(currentPanel.focus);
             }
             if (gamePadBClick()) {
                 selectMenu(MenuScreens.Main);
             }
 
-            Panel currentPanel = menus[currentMenu];
-            bool usedInput = currentPanel.UpdateInput();
+            bool usedInput = currentPanel.component.UpdateInput();
         }
         public void Update() {
-            Panel currentPanel = menus[currentMenu];
+            Component currentPanel = menus[currentMenu].component;
             currentPanel.Update();
         }
         public void DrawUI(SpriteBatch s) {
-            Panel currentPanel = menus[currentMenu];
+            Component currentPanel = menus[currentMenu].component;
             currentPanel.Draw(s, new Rectangle(0, 0, Utility.WindowWidth, Utility.WindowHeight));
         }
         private Component createButtonLabel(string text, Action<Button> a) {
@@ -254,6 +200,74 @@ namespace AposGameCheatSheet
             }
             public override int Width => Utility.WindowWidth;
             public override int Height => Utility.WindowHeight;
+        }
+        private class ComponentFocus {
+            public ComponentFocus(Component c) {
+                component = c;
+
+                if (focus != null) {
+                    focus.HasFocus = false;
+                }
+
+                Component possibleFocus = findFinal(component);
+                if (possibleFocus.CanFocus) {
+                    focus = possibleFocus;
+                    focus.HasFocus = true;
+                } else {
+                    focus = findNext(possibleFocus);
+                }
+            }
+            public ComponentFocus(Component c, Component f) {
+                component = c;
+                focus = f;
+            }
+            public Component component;
+            public Component focus;
+
+            public Component findPrevious(Component c) {
+                if (c != null) {
+                    Component currentFocus = c;
+                    currentFocus.HasFocus = false;
+
+                    do {
+                        currentFocus = currentFocus.GetPrevious();
+                        currentFocus = findFinal(currentFocus);
+                    } while (!currentFocus.CanFocus && currentFocus != c);
+
+                    if (currentFocus.CanFocus) {
+                        currentFocus.HasFocus = true;
+                        return currentFocus;
+                    }
+                }
+                return null;
+            }
+            public Component findNext(Component c) {
+                if (c != null) {
+                    Component currentFocus = c;
+                    currentFocus.HasFocus = false;
+
+                    do {
+                        currentFocus = currentFocus.GetNext();
+                        currentFocus = findFinal(currentFocus);
+                    } while (!currentFocus.CanFocus && currentFocus != c);
+
+                    if (currentFocus.CanFocus) {
+                        currentFocus.HasFocus = true;
+                        return currentFocus;
+                    }
+                }
+                return null;
+            }
+            public Component findFinal(Component c) {
+                Component previousFinal;
+                Component currentFinal = c;
+                do {
+                    previousFinal = currentFinal;
+                    currentFinal = previousFinal.GetFinal();
+                } while (currentFinal != previousFinal && currentFinal != c);
+
+                return currentFinal;
+            }
         }
     }
 }
