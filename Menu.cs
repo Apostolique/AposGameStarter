@@ -15,6 +15,13 @@ namespace AposGameCheatSheet
     class Menu
     {
         public Menu() {
+            hoverAction = delegate(Button b) {
+                ComponentFocus currentPanel = menus[currentMenu];
+                currentPanel.focus.HasFocus = false;
+                currentPanel.focus = b;
+                currentPanel.focus.HasFocus = true;
+            };
+
             menus = new Dictionary<MenuScreens, ComponentFocus>();
             menus.Add(MenuScreens.Main, setupMainMenu());
             menus.Add(MenuScreens.Settings, setupSettingsMenu());
@@ -31,6 +38,9 @@ namespace AposGameCheatSheet
         }
         Dictionary<MenuScreens, ComponentFocus> menus;
         MenuScreens currentMenu;
+
+        Func<Button, bool> hoverFocus = (Button b) => !b.oldIsHovered && b.isHovered;
+        Action<Button> hoverAction;
 
         Func<Button, bool> leftClick = (Button b) => b.isHovered && Utility.Input.OldMouse.LeftButton == ButtonState.Released && Utility.Input.NewMouse.LeftButton == ButtonState.Pressed;
         Func<Button, bool> gamePadAClick = (Button b) => b.HasFocus && Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasAButton && Utility.Input.OldGamePad.Buttons.A == ButtonState.Released && Utility.Input.NewGamePad.Buttons.A == ButtonState.Pressed;
@@ -148,6 +158,7 @@ namespace AposGameCheatSheet
             b.setBox(false);
             b.AddAction(leftClick, a);
             b.AddAction(gamePadAClick, a);
+            b.AddAction(hoverFocus, hoverAction);
 
             Border border = new Border(b, 20, 20, 20, 20);
             return border;
@@ -165,6 +176,7 @@ namespace AposGameCheatSheet
             b.setBox(false);
             b.AddAction(leftClick, a);
             b.AddAction(gamePadAClick, a);
+            b.AddAction(hoverFocus, hoverAction);
 
             Border border = new Border(b, 20, 20, 20, 20);
             return border;

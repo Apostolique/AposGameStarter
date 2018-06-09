@@ -33,6 +33,7 @@ namespace AposGameCheatSheet.AposGui
         public Component Item {
             get; set;
         }
+        public bool oldIsHovered = false;
         public bool isHovered = false;
         public bool showBox = true;
         private List<ButtonConditionAction> buttonActions;
@@ -68,7 +69,8 @@ namespace AposGameCheatSheet.AposGui
             buttonActions.Add(new ButtonConditionAction(condition, bAction));
         }
         public override bool UpdateInput() {
-            isHovered = IsInside(new Point(Utility.Input.NewMouse.X, Utility.Input.NewMouse.Y)) || HasFocus;
+            oldIsHovered = isHovered;
+            isHovered = IsInside(new Point(Utility.Input.NewMouse.X, Utility.Input.NewMouse.Y));
 
             bool isUsed = false;
 
@@ -85,7 +87,7 @@ namespace AposGameCheatSheet.AposGui
             clipRect = ClipRectangle(clipRect);
 
             if (showBox) {
-                if (isHovered) {
+                if (isHovered || HasFocus) {
                     s.FillRectangle(new RectangleF(Left, Top, Width, Height), new Color(20, 20, 20));
                 } else {
                     s.FillRectangle(new RectangleF(Left, Top, Width, Height), Color.Black);
@@ -94,7 +96,7 @@ namespace AposGameCheatSheet.AposGui
 
             Item.Draw(s, clipRect);
 
-            if (showBox && (isHovered)) {
+            if (showBox && (isHovered || HasFocus)) {
                 s.DrawLine(Left, Top, Left, Bottom, Color.White, 2);
                 s.DrawLine(Right, Top, Right, Bottom, Color.White, 2);
                 s.DrawLine(Left, Top, Right, Top, Color.White, 2);
