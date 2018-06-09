@@ -45,6 +45,34 @@ namespace AposGameCheatSheet.AposGui
             children.Remove(e);
             e.Parent = null;
         }
+        public override Component GetPrevious(Component c) {
+            int index = children.IndexOf(c) - 1;
+            if (index >= 0 && children.Count > 0) {
+                return children[index];
+            } else if (Parent != null) {
+                return Parent.GetPrevious(this);
+            } else if (children.Count > 0) {
+                return children.Last();
+            }
+            return this;
+        }
+        public override Component GetNext(Component c) {
+            int index = children.IndexOf(c) + 1;
+            if (index < children.Count) {
+                return children[index];
+            } else if (Parent != null) {
+                return Parent.GetNext(this);
+            } else if (children.Count > 0) {
+                return children[0];
+            }
+            return this;
+        }
+        public override Component GetFinal() {
+            if (children.Count > 0) {
+                return children[0];
+            }
+            return this;
+        }
         public override void UpdateSetup() {
             if (Layout != null) {
                 Layout.RecomputeChildren(children);

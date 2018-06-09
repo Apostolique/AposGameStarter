@@ -21,6 +21,7 @@ namespace AposGameCheatSheet.AposGui
             Width = 100;
             Height = 100;
             Parent = null;
+            CanFocus = false;
         }
         public virtual Point Position {
             get; set;
@@ -40,6 +41,39 @@ namespace AposGameCheatSheet.AposGui
         public virtual Rectangle BoundingRect => new Rectangle(Left, Top, Width, Height);
         public virtual Component Parent {
             get; set;
+        }
+        public virtual bool CanFocus {
+            get; set;
+        }
+        public virtual bool HasFocus {
+            get; set;
+        }
+        public virtual Component GetPrevious() {
+            if (Parent != null) {
+                return Parent.GetPrevious(this);
+            }
+            return this;
+        }
+        public virtual Component GetNext() {
+            if (Parent != null) {
+                return Parent.GetNext(this);
+            }
+            return this;
+        }
+        public virtual Component GetPrevious(Component c) {
+            if (Parent != null) {
+                return Parent.GetPrevious(this);
+            }
+            return this;
+        }
+        public virtual Component GetNext(Component c) {
+            if (Parent != null) {
+                return Parent.GetNext(this);
+            }
+            return this;
+        }
+        public virtual Component GetFinal() {
+            return this;
         }
 
         public Rectangle ClipRectangle(Rectangle rect1) {

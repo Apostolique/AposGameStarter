@@ -20,11 +20,12 @@ namespace AposGameCheatSheet.AposGui
         public Button(Component iItem) {
             Item = iItem;
             buttonActions = new List<ButtonConditionAction>();
+            CanFocus = true;
         }
         struct ButtonConditionAction {
-            public Func<bool> condition;
+            public Func<Button, bool> condition;
             public Action<Button> buttonAction;
-            public ButtonConditionAction(Func<bool> iCondition, Action<Button> iButtonAction) {
+            public ButtonConditionAction(Func<Button, bool> iCondition, Action<Button> iButtonAction) {
                 condition = iCondition;
                 buttonAction = iButtonAction;
             }
@@ -63,16 +64,16 @@ namespace AposGameCheatSheet.AposGui
                 }
             }
         }
-        public void AddAction(Func<bool> condition, Action<Button> bAction) {
+        public void AddAction(Func<Button, bool> condition, Action<Button> bAction) {
             buttonActions.Add(new ButtonConditionAction(condition, bAction));
         }
         public override bool UpdateInput() {
-            isHovered = IsInside(new Point(Utility.Input.NewMouse.X, Utility.Input.NewMouse.Y));
+            isHovered = IsInside(new Point(Utility.Input.NewMouse.X, Utility.Input.NewMouse.Y)) || HasFocus;
 
             bool isUsed = false;
 
             foreach (ButtonConditionAction bca in buttonActions) {
-                if (isHovered && bca.condition()) {
+                if (bca.condition(this)) {
                     bca.buttonAction(this);
                     isUsed = true;
                 }
@@ -93,7 +94,7 @@ namespace AposGameCheatSheet.AposGui
 
             Item.Draw(s, clipRect);
 
-            if (showBox && isHovered) {
+            if (showBox && (isHovered)) {
                 s.DrawLine(Left, Top, Left, Bottom, Color.White, 2);
                 s.DrawLine(Right, Top, Right, Bottom, Color.White, 2);
                 s.DrawLine(Left, Top, Right, Top, Color.White, 2);

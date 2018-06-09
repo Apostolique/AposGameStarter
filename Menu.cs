@@ -15,14 +15,13 @@ namespace AposGameCheatSheet
     class Menu
     {
         public Menu() {
-            currentMenu = MenuScreens.Main;
-
             menus = new Dictionary<MenuScreens, Panel>();
-
             menus.Add(MenuScreens.Main, setupMainMenu());
             menus.Add(MenuScreens.Settings, setupSettingsMenu());
             menus.Add(MenuScreens.Debug, setupDebugMenu());
             menus.Add(MenuScreens.Quit, setupQuitConfirm());
+
+            selectMenu(MenuScreens.Main);
         }
         enum MenuScreens {
             Main,
@@ -32,8 +31,13 @@ namespace AposGameCheatSheet
         }
         Dictionary<MenuScreens, Panel> menus;
         MenuScreens currentMenu;
+        Component focus;
 
-        Func<bool> leftClick = () => Utility.Input.OldMouse.LeftButton == ButtonState.Released && Utility.Input.NewMouse.LeftButton == ButtonState.Pressed;
+        Func<Button, bool> leftClick = (Button b) => b.isHovered && Utility.Input.OldMouse.LeftButton == ButtonState.Released && Utility.Input.NewMouse.LeftButton == ButtonState.Pressed;
+        Func<Button, bool> gamePadAClick = (Button b) => b.HasFocus && Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasAButton && Utility.Input.OldGamePad.Buttons.A == ButtonState.Released && Utility.Input.NewGamePad.Buttons.A == ButtonState.Pressed;
+        Func<bool> previousFocusAction = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasLeftStickButton && Utility.Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Utility.Input.NewGamePad.ThumbSticks.Left.Y > 0;
+        Func<bool> nextFocusAction = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasLeftStickButton && Utility.Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Utility.Input.NewGamePad.ThumbSticks.Left.Y < 0;
+
         private Panel setupMainMenu() {
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
@@ -42,16 +46,16 @@ namespace AposGameCheatSheet
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
 
-            mp.Add(createButtonLabel("Resume Game", leftClick, delegate(Button b) {
+            mp.Add(createButtonLabel("Resume Game", delegate(Button b) {
             }));
-            mp.Add(createButtonLabel("Settings", leftClick, delegate(Button b) {
-                currentMenu = MenuScreens.Settings;
+            mp.Add(createButtonLabel("Settings", delegate(Button b) {
+                selectMenu(MenuScreens.Settings);
             }));
-            mp.Add(createButtonLabel("Debug", leftClick, delegate(Button b) {
-                currentMenu = MenuScreens.Debug;
+            mp.Add(createButtonLabel("Debug", delegate(Button b) {
+                selectMenu(MenuScreens.Debug);
             }));
-            mp.Add(createButtonLabel("Quit", leftClick, delegate(Button b) {
-                currentMenu = MenuScreens.Quit;
+            mp.Add(createButtonLabel("Quit", delegate(Button b) {
+                selectMenu(MenuScreens.Quit);
             }));
             
             return mp;
@@ -63,8 +67,8 @@ namespace AposGameCheatSheet
             Label l1 = new Label("Settings");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
-            mp.Add(createButtonLabel("Back", leftClick, delegate(Button b) {
-                currentMenu = MenuScreens.Main;
+            mp.Add(createButtonLabel("Back", delegate(Button b) {
+                selectMenu(MenuScreens.Main);
             }));
 
             return mp;
@@ -78,11 +82,11 @@ namespace AposGameCheatSheet
             mp.Add(l1Border);
             mp.Add(createButtonLabelDynamic(delegate() {
                 return "Show path line: " + (Utility.showLine ? "true" : "false");
-            }, leftClick, delegate(Button b) {
+            }, delegate(Button b) {
                 Utility.showLine = !Utility.showLine;
             }));
-            mp.Add(createButtonLabel("Back", leftClick, delegate(Button b) {
-                currentMenu = MenuScreens.Main;
+            mp.Add(createButtonLabel("Back", delegate(Button b) {
+                selectMenu(MenuScreens.Main);
             }));
             
             return mp;
@@ -98,14 +102,72 @@ namespace AposGameCheatSheet
             Label l1 = new Label("Do you really want to quit?");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
-            mp.Add(createButtonLabel("Yes", leftClick, delegate(Button b) {
+            mp.Add(createButtonLabel("Yes", delegate(Button b) {
                 Utility.game.Exit();
             }));
-            mp.Add(createButtonLabel("No", leftClick, delegate(Button b) {
-                currentMenu = MenuScreens.Main;
+            mp.Add(createButtonLabel("No", delegate(Button b) {
+                selectMenu(MenuScreens.Main);
             }));
 
             return quitMenu;
+        }
+        private void selectMenu(MenuScreens ms) {
+            if (focus != null) {
+                focus.HasFocus = false;
+            }
+
+            currentMenu = ms;
+            Component possibleFocus = findFinal(menus[ms]);
+            if (possibleFocus.CanFocus) {
+                focus = possibleFocus;
+                focus.HasFocus = true;
+            } else {
+                focus = findNext(possibleFocus);
+            }
+        }
+        private Component findPrevious(Component c) {
+            if (c != null) {
+                Component currentFocus = c;
+                currentFocus.HasFocus = false;
+
+                do {
+                    currentFocus = currentFocus.GetPrevious();
+                    currentFocus = findFinal(currentFocus);
+                } while (!currentFocus.CanFocus && currentFocus != c);
+
+                if (currentFocus.CanFocus) {
+                    currentFocus.HasFocus = true;
+                    return currentFocus;
+                }
+            }
+            return null;
+        }
+        private Component findNext(Component c) {
+            if (c != null) {
+                Component currentFocus = c;
+                currentFocus.HasFocus = false;
+
+                do {
+                    currentFocus = currentFocus.GetNext();
+                    currentFocus = findFinal(currentFocus);
+                } while (!currentFocus.CanFocus && currentFocus != c);
+
+                if (currentFocus.CanFocus) {
+                    currentFocus.HasFocus = true;
+                    return currentFocus;
+                }
+            }
+            return null;
+        }
+        private Component findFinal(Component c) {
+            Component previousFinal;
+            Component currentFinal = c;
+            do {
+                previousFinal = currentFinal;
+                currentFinal = previousFinal.GetFinal();
+            } while (currentFinal != previousFinal && currentFinal != c);
+
+            return currentFinal;
         }
         public void UpdateSetup() {
             foreach (KeyValuePair<MenuScreens, Panel> kvp in menus) {
@@ -113,6 +175,13 @@ namespace AposGameCheatSheet
             }
         }
         public void UpdateInput() {
+            if (nextFocusAction()) {
+                focus = findNext(focus);
+            }
+            if (previousFocusAction()) {
+                focus = findPrevious(focus);
+            }
+
             Panel currentPanel = menus[currentMenu];
             bool usedInput = currentPanel.UpdateInput();
         }
@@ -124,10 +193,11 @@ namespace AposGameCheatSheet
             Panel currentPanel = menus[currentMenu];
             currentPanel.Draw(s, new Rectangle(0, 0, Utility.WindowWidth, Utility.WindowHeight));
         }
-        private Component createButtonLabel(string text, Func<bool> c, Action<Button> a) {
+        private Component createButtonLabel(string text, Action<Button> a) {
             Button b = new ButtonLabel(text);
             b.setBox(false);
-            b.AddAction(c, a);
+            b.AddAction(leftClick, a);
+            b.AddAction(gamePadAClick, a);
 
             Border border = new Border(b, 20, 20, 20, 20);
             return border;
@@ -139,11 +209,12 @@ namespace AposGameCheatSheet
             Border border = new Border(b, 20, 20, 20, 20);
             return border;
         }
-        private Component createButtonLabelDynamic(Func<string> text, Func<bool> c,  Action<Button> a) {
+        private Component createButtonLabelDynamic(Func<string> text, Action<Button> a) {
             LabelDynamic ld = new LabelDynamic(text);
             Button b = new ButtonLabel(ld);
             b.setBox(false);
-            b.AddAction(c, a);
+            b.AddAction(leftClick, a);
+            b.AddAction(gamePadAClick, a);
 
             Border border = new Border(b, 20, 20, 20, 20);
             return border;

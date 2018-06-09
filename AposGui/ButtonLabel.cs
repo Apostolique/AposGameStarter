@@ -25,20 +25,20 @@ namespace AposGameCheatSheet.AposGui
             clipRect = ClipRectangle(clipRect);
 
             if (showBox) {
-                if (isHovered) {
+                if (isHovered || HasFocus) {
                     s.FillRectangle(new RectangleF(Left, Top, Width, Height), new Color(20, 20, 20));
                 } else {
                     s.FillRectangle(new RectangleF(Left, Top, Width, Height), Color.Black);
                 }
             }
 
-            if (showBox || isHovered) {
+            if (showBox || isHovered || HasFocus) {
                 Item.Draw(s, clipRect);
             } else {
                 ((Label)Item).Draw(s, clipRect, new Color(150, 150, 150));
             }
 
-            if (showBox && isHovered) {
+            if (showBox && (isHovered || HasFocus)) {
                 s.DrawLine(Left, Top, Left, Bottom, Color.White, 2);
                 s.DrawLine(Right, Top, Right, Bottom, Color.White, 2);
                 s.DrawLine(Left, Top, Right, Top, Color.White, 2);

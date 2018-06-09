@@ -22,6 +22,7 @@ namespace AposGameCheatSheet.AposGui
         }
         public Border(Component iC, int iMarginLeft, int iMarginTop, int iMarginRight, int iMarginBottom) {
             Item = iC;
+            Item.Parent = this;
             MarginLeft = iMarginLeft;
             MarginTop = iMarginTop;
             MarginRight = iMarginRight;
@@ -66,6 +67,12 @@ namespace AposGameCheatSheet.AposGui
         }
         public virtual int MarginBottom {
             get; set;
+        }
+        public override Component GetFinal() {
+            if (Item != null) {
+                return Item;
+            }
+            return this;
         }
         public override bool UpdateInput() {
             return Item.UpdateInput();
