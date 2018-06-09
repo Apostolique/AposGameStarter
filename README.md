@@ -9,3 +9,9 @@ This project will include features like:
 * initial project structure
 
 This repository is setup so that you can simply clone it and start making your game.
+
+_____
+
+Example menu made with the GUI code:
+
+<img src="https://i.imgur.com/BNAdvZ5.gif" alt="Apos GUI Loop" width="800" height="480" />
