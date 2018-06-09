@@ -39,9 +39,11 @@ namespace AposGameCheatSheet.AposGui
 
         public virtual void Add(Component e) {
             children.Add(e);
+            e.Parent = this;
         }
         public virtual void Remove(Component e) {
             children.Remove(e);
+            e.Parent = null;
         }
         public override void UpdateSetup() {
             if (Layout != null) {

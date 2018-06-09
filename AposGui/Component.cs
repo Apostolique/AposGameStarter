@@ -20,6 +20,7 @@ namespace AposGameCheatSheet.AposGui
             Position = new Point(0, 0);
             Width = 100;
             Height = 100;
+            Parent = null;
         }
         public virtual Point Position {
             get; set;
@@ -37,6 +38,9 @@ namespace AposGameCheatSheet.AposGui
         public virtual int Right => Position.X + Width;
         public virtual int Bottom => Position.Y + Height;
         public virtual Rectangle BoundingRect => new Rectangle(Left, Top, Width, Height);
+        public virtual Component Parent {
+            get; set;
+        }
 
         public Rectangle ClipRectangle(Rectangle rect1) {
             Rectangle boundingRect = BoundingRect;
