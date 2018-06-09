@@ -37,6 +37,7 @@ namespace AposGameCheatSheet
         Func<Button, bool> gamePadAClick = (Button b) => b.HasFocus && Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasAButton && Utility.Input.OldGamePad.Buttons.A == ButtonState.Released && Utility.Input.NewGamePad.Buttons.A == ButtonState.Pressed;
         Func<bool> previousFocusAction = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasLeftStickButton && Utility.Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Utility.Input.NewGamePad.ThumbSticks.Left.Y > 0;
         Func<bool> nextFocusAction = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasLeftStickButton && Utility.Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Utility.Input.NewGamePad.ThumbSticks.Left.Y < 0;
+        Func<bool> gamePadBClick = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasBButton && Utility.Input.OldGamePad.Buttons.B == ButtonState.Released && Utility.Input.NewGamePad.Buttons.B == ButtonState.Pressed;
 
         private Panel setupMainMenu() {
             MenuPanel mp = new MenuPanel();
@@ -180,6 +181,9 @@ namespace AposGameCheatSheet
             }
             if (previousFocusAction()) {
                 focus = findPrevious(focus);
+            }
+            if (gamePadBClick()) {
+                selectMenu(MenuScreens.Main);
             }
 
             Panel currentPanel = menus[currentMenu];
