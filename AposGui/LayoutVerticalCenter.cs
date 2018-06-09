@@ -38,7 +38,7 @@ namespace AposGameCheatSheet.AposGui
             _newHeight = Panel.Height;
 
             if (_oldWidth != _newWidth || _oldHeigth != _newHeight) {
-                Panel.Offset = new Point(0, 0);
+                Panel.Offset = new Point(Panel.Offset.X, (int)Math.Min(Math.Max(Panel.Offset.Y, Panel.Height - Panel.Size.Height), 0));
             }
 
             Point position = Panel.Position;
