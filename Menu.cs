@@ -42,11 +42,11 @@ namespace AposGameCheatSheet
         Func<Button, bool> hoverFocus = (Button b) => !b.OldIsHovered && b.IsHovered;
         Action<Button> hoverAction;
 
-        Func<Button, bool> leftClick = (Button b) => b.IsHovered && Utility.Input.OldMouse.LeftButton == ButtonState.Released && Utility.Input.NewMouse.LeftButton == ButtonState.Pressed;
-        Func<Button, bool> gamePadAClick = (Button b) => b.HasFocus && Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasAButton && Utility.Input.OldGamePad.Buttons.A == ButtonState.Released && Utility.Input.NewGamePad.Buttons.A == ButtonState.Pressed;
-        Func<bool> previousFocusAction = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasLeftStickButton && Utility.Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Utility.Input.NewGamePad.ThumbSticks.Left.Y > 0;
-        Func<bool> nextFocusAction = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasLeftStickButton && Utility.Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Utility.Input.NewGamePad.ThumbSticks.Left.Y < 0;
-        Func<bool> gamePadBClick = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasBButton && Utility.Input.OldGamePad.Buttons.B == ButtonState.Released && Utility.Input.NewGamePad.Buttons.B == ButtonState.Pressed;
+        Func<Button, bool> leftClick = (Button b) => b.IsHovered && Input.OldMouse.LeftButton == ButtonState.Released && Input.NewMouse.LeftButton == ButtonState.Pressed;
+        Func<Button, bool> gamePadAClick = (Button b) => b.HasFocus && Input.Capabilities.IsConnected && Input.Capabilities.HasAButton && Input.OldGamePad.Buttons.A == ButtonState.Released && Input.NewGamePad.Buttons.A == ButtonState.Pressed;
+        Func<bool> previousFocusAction = () => Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton && Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Input.NewGamePad.ThumbSticks.Left.Y > 0;
+        Func<bool> nextFocusAction = () => Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton && Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Input.NewGamePad.ThumbSticks.Left.Y < 0;
+        Func<bool> gamePadBClick = () => Input.Capabilities.IsConnected && Input.Capabilities.HasBButton && Input.OldGamePad.Buttons.B == ButtonState.Released && Input.NewGamePad.Buttons.B == ButtonState.Pressed;
 
         private ComponentFocus setupMainMenu() {
             MenuPanel mp = new MenuPanel();
@@ -198,7 +198,7 @@ namespace AposGameCheatSheet
             }
             public override bool UpdateInput() {
                 bool used = base.UpdateInput();
-                return used || IsInside(new Point(Utility.Input.NewMouse.X, Utility.Input.NewMouse.Y));
+                return used || IsInside(new Point(Input.NewMouse.X, Input.NewMouse.Y));
             }
 
             public override void Draw(SpriteBatch s, Rectangle clipRect) {

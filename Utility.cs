@@ -10,8 +10,6 @@ namespace AposGameCheatSheet
         public static int WindowWidth => Window.ClientBounds.Width;
         public static int WindowHeight => Window.ClientBounds.Height;
 
-        public static Input Input;
-
         public static bool showLine = false;
     }
 }

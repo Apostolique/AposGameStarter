@@ -18,11 +18,11 @@ namespace AposGameCheatSheet.AposGui
         }
         public override bool UpdateInput() {
             bool used = base.UpdateInput();
-            bool isHovered = IsInside(new Point(Utility.Input.NewMouse.X, Utility.Input.NewMouse.Y));
+            bool isHovered = IsInside(new Point(Input.NewMouse.X, Input.NewMouse.Y));
             
             if (!used && isHovered) {
-                if (Utility.Input.NewMouse.ScrollWheelValue != Utility.Input.OldMouse.ScrollWheelValue) {
-                    Offset = new Point(Offset.X, (int)Math.Min(Math.Max(Offset.Y + Utility.Input.NewMouse.ScrollWheelValue - Utility.Input.OldMouse.ScrollWheelValue, Height - Size.Height), 0));
+                if (Input.NewMouse.ScrollWheelValue != Input.OldMouse.ScrollWheelValue) {
+                    Offset = new Point(Offset.X, (int)Math.Min(Math.Max(Offset.Y + Input.NewMouse.ScrollWheelValue - Input.OldMouse.ScrollWheelValue, Height - Size.Height), 0));
                 }
             }
 

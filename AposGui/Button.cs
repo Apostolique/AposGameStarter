@@ -79,7 +79,7 @@ namespace AposGameCheatSheet.AposGui
         }
         public override bool UpdateInput() {
             OldIsHovered = IsHovered;
-            IsHovered = IsInside(new Point(Utility.Input.NewMouse.X, Utility.Input.NewMouse.Y));
+            IsHovered = IsInside(new Point(Input.NewMouse.X, Input.NewMouse.Y));
 
             bool isUsed = false;
 

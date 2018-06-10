@@ -25,7 +25,7 @@ namespace AposGameCheatSheet
             // TODO: Add your initialization logic here
             Utility.game = this;
             Utility.Window = Window;
-            Utility.Input = new Input();
+            Input.Setup();
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += WindowClientChanged;
@@ -47,7 +47,7 @@ namespace AposGameCheatSheet
 
         protected override void Update(GameTime gameTime)
         {
-            Utility.Input.Update();
+            Input.Update();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
