@@ -39,10 +39,10 @@ namespace AposGameCheatSheet
         Dictionary<MenuScreens, ComponentFocus> menus;
         MenuScreens currentMenu;
 
-        Func<Button, bool> hoverFocus = (Button b) => !b.oldIsHovered && b.isHovered;
+        Func<Button, bool> hoverFocus = (Button b) => !b.OldIsHovered && b.IsHovered;
         Action<Button> hoverAction;
 
-        Func<Button, bool> leftClick = (Button b) => b.isHovered && Utility.Input.OldMouse.LeftButton == ButtonState.Released && Utility.Input.NewMouse.LeftButton == ButtonState.Pressed;
+        Func<Button, bool> leftClick = (Button b) => b.IsHovered && Utility.Input.OldMouse.LeftButton == ButtonState.Released && Utility.Input.NewMouse.LeftButton == ButtonState.Pressed;
         Func<Button, bool> gamePadAClick = (Button b) => b.HasFocus && Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasAButton && Utility.Input.OldGamePad.Buttons.A == ButtonState.Released && Utility.Input.NewGamePad.Buttons.A == ButtonState.Pressed;
         Func<bool> previousFocusAction = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasLeftStickButton && Utility.Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Utility.Input.NewGamePad.ThumbSticks.Left.Y > 0;
         Func<bool> nextFocusAction = () => Utility.Input.Capabilities.IsConnected && Utility.Input.Capabilities.HasLeftStickButton && Utility.Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Utility.Input.NewGamePad.ThumbSticks.Left.Y < 0;
@@ -159,7 +159,7 @@ namespace AposGameCheatSheet
         }
         private Component createButtonLabel(string text, Action<Button> a) {
             Button b = new ButtonLabel(text);
-            b.setBox(false);
+            b.ShowBox = false;
             b.AddAction(leftClick, a);
             b.AddAction(gamePadAClick, a);
             b.AddAction(hoverFocus, hoverAction);
@@ -169,7 +169,7 @@ namespace AposGameCheatSheet
         }
         private Component createButtonLabel(string text) {
             Button b = new ButtonLabel(text);
-            b.setBox(false);
+            b.ShowBox = false;
 
             Border border = new Border(b, 20, 20, 20, 20);
             return border;
@@ -177,7 +177,7 @@ namespace AposGameCheatSheet
         private Component createButtonLabelDynamic(Func<string> text, Action<Button> a) {
             LabelDynamic ld = new LabelDynamic(text);
             Button b = new ButtonLabel(ld);
-            b.setBox(false);
+            b.ShowBox = false;
             b.AddAction(leftClick, a);
             b.AddAction(gamePadAClick, a);
             b.AddAction(hoverFocus, hoverAction);
@@ -188,7 +188,7 @@ namespace AposGameCheatSheet
         private Component createButtonLabelDynamic(Func<string> text) {
             LabelDynamic ld = new LabelDynamic(text);
             Button b = new ButtonLabel(ld);
-            b.setBox(false);
+            b.ShowBox = false;
 
             Border border = new Border(b, 20, 20, 20, 20);
             return border;

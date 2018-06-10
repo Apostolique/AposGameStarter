@@ -21,6 +21,9 @@ namespace AposGameCheatSheet.AposGui
             Item = iItem;
             buttonActions = new List<ButtonConditionAction>();
             CanFocus = true;
+            OldIsHovered = false;
+            IsHovered = false;
+            ShowBox = true;
         }
         struct ButtonConditionAction {
             public Func<Button, bool> condition;
@@ -30,12 +33,18 @@ namespace AposGameCheatSheet.AposGui
                 buttonAction = iButtonAction;
             }
         }
-        public Component Item {
+        public virtual Component Item {
             get; set;
         }
-        public bool oldIsHovered = false;
-        public bool isHovered = false;
-        public bool showBox = true;
+        public virtual bool OldIsHovered {
+            get; set;
+        }
+        public virtual bool IsHovered {
+            get; set;
+        }
+        public virtual bool ShowBox {
+            get; set;
+        }
         private List<ButtonConditionAction> buttonActions;
 
         public override Point Position {
@@ -69,8 +78,8 @@ namespace AposGameCheatSheet.AposGui
             buttonActions.Add(new ButtonConditionAction(condition, bAction));
         }
         public override bool UpdateInput() {
-            oldIsHovered = isHovered;
-            isHovered = IsInside(new Point(Utility.Input.NewMouse.X, Utility.Input.NewMouse.Y));
+            OldIsHovered = IsHovered;
+            IsHovered = IsInside(new Point(Utility.Input.NewMouse.X, Utility.Input.NewMouse.Y));
 
             bool isUsed = false;
 
@@ -86,8 +95,8 @@ namespace AposGameCheatSheet.AposGui
         public override void Draw(SpriteBatch s, Rectangle clipRect) {
             clipRect = ClipRectangle(clipRect);
 
-            if (showBox) {
-                if (isHovered || HasFocus) {
+            if (ShowBox) {
+                if (IsHovered || HasFocus) {
                     s.FillRectangle(new RectangleF(Left, Top, Width, Height), new Color(20, 20, 20));
                 } else {
                     s.FillRectangle(new RectangleF(Left, Top, Width, Height), Color.Black);
@@ -96,7 +105,7 @@ namespace AposGameCheatSheet.AposGui
 
             Item.Draw(s, clipRect);
 
-            if (showBox && (isHovered || HasFocus)) {
+            if (ShowBox && (IsHovered || HasFocus)) {
                 s.DrawLine(Left, Top, Left, Bottom, Color.White, 2);
                 s.DrawLine(Right, Top, Right, Bottom, Color.White, 2);
                 s.DrawLine(Left, Top, Right, Top, Color.White, 2);
@@ -105,9 +114,5 @@ namespace AposGameCheatSheet.AposGui
         }
         public override int PrefWidth => Item.PrefWidth;
         public override int PrefHeight => Item.PrefHeight;
-
-        public void setBox(bool iBox) {
-            showBox = iBox;
-        }
     }
 }
