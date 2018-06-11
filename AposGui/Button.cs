@@ -25,7 +25,7 @@ namespace AposGameCheatSheet.AposGui
             IsHovered = false;
             ShowBox = true;
         }
-        struct ButtonConditionAction {
+        protected struct ButtonConditionAction {
             public Func<Button, bool> condition;
             public Action<Button> buttonAction;
             public ButtonConditionAction(Func<Button, bool> iCondition, Action<Button> iButtonAction) {
@@ -45,7 +45,7 @@ namespace AposGameCheatSheet.AposGui
         public virtual bool ShowBox {
             get; set;
         }
-        private List<ButtonConditionAction> buttonActions;
+        protected List<ButtonConditionAction> buttonActions;
 
         public override Point Position {
             get => base.Position;

@@ -17,10 +17,10 @@ namespace AposGameCheatSheet.AposGui
     {
         public LayoutVerticalCenter() {
         }
-        private int _oldWidth;
-        private int _oldHeigth;
-        private int _newWidth;
-        private int _newHeight;
+        protected int _oldWidth;
+        protected int _oldHeigth;
+        protected int _newWidth;
+        protected int _newHeight;
 
         public override Panel Panel {
             get => base.Panel;

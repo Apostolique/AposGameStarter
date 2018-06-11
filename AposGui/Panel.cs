@@ -28,7 +28,7 @@ namespace AposGameCheatSheet.AposGui
         public Size2 Size {
             get; set;
         }
-        private Layout _layout;
+        protected Layout _layout;
         public Layout Layout {
             get => _layout;
             set {
