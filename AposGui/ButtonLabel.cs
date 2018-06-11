@@ -21,9 +21,7 @@ namespace AposGameCheatSheet.AposGui
         public ButtonLabel(Label text) {
             Item = text;
         }
-        public override void Draw(SpriteBatch s, Rectangle clipRect) {
-            clipRect = ClipRectangle(clipRect);
-
+        public override void Draw(SpriteBatch s) {
             if (ShowBox) {
                 if (IsHovered || HasFocus) {
                     s.FillRectangle(new RectangleF(Left, Top, Width, Height), new Color(20, 20, 20));
@@ -33,9 +31,9 @@ namespace AposGameCheatSheet.AposGui
             }
 
             if (ShowBox || IsHovered || HasFocus) {
-                Item.Draw(s, clipRect);
+                Item.Draw(s);
             } else {
-                ((Label)Item).Draw(s, clipRect, new Color(150, 150, 150));
+                ((Label)Item).Draw(s, new Color(150, 150, 150));
             }
 
             if (ShowBox && (IsHovered || HasFocus)) {

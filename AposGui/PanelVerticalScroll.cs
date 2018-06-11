@@ -18,7 +18,7 @@ namespace AposGameCheatSheet.AposGui
         }
         public override bool UpdateInput() {
             bool used = base.UpdateInput();
-            bool isHovered = IsInside(new Point(Input.NewMouse.X, Input.NewMouse.Y));
+            bool isHovered = IsInsideClip(new Point(Input.NewMouse.X, Input.NewMouse.Y));
             
             if (!used && isHovered) {
                 if (Input.NewMouse.ScrollWheelValue != Input.OldMouse.ScrollWheelValue) {

@@ -22,6 +22,7 @@ namespace AposGameCheatSheet.AposGui
             Height = 100;
             Parent = null;
             CanFocus = false;
+            _clippingRect = Maybe<Rectangle>.Nothing;
         }
         public virtual Point Position {
             get; set;
@@ -39,6 +40,18 @@ namespace AposGameCheatSheet.AposGui
         public virtual int Right => Position.X + Width;
         public virtual int Bottom => Position.Y + Height;
         public virtual Rectangle BoundingRect => new Rectangle(Left, Top, Width, Height);
+        protected Maybe<Rectangle> _clippingRect;
+        public virtual Rectangle ClippingRect {
+            get {
+                if (_clippingRect.HasValue) {
+                    return _clippingRect.Value;
+                }
+                return BoundingRect;
+            }
+            set {
+                _clippingRect = new Maybe<Rectangle>(ClipRectangle(value));
+            }
+        }
         public virtual Component Parent {
             get; set;
         }
@@ -77,9 +90,7 @@ namespace AposGameCheatSheet.AposGui
         }
 
         public Rectangle ClipRectangle(Rectangle rect1) {
-            Rectangle boundingRect = BoundingRect;
-
-            return ClipRectangle(rect1, boundingRect);
+            return ClipRectangle(rect1, BoundingRect);
         }
         public Rectangle ClipRectangle(Rectangle rect1, Rectangle rect2) {
             var left = rect1.Left < rect2.Left ? rect2.Left : rect1.Left;
@@ -123,6 +134,10 @@ namespace AposGameCheatSheet.AposGui
         public virtual bool IsInside(Point v) {
             return Left < v.X && Right > v.X && Top < v.Y && Bottom > v.Y;
         }
+        public virtual bool IsInsideClip(Point v) {
+            Rectangle r = ClippingRect;
+            return r.Left < v.X && r.Right > v.X && r.Top < v.Y && r.Bottom > v.Y;
+        }
         public virtual void UpdateSetup() {
         }
         public virtual bool UpdateInput() {
@@ -130,7 +145,7 @@ namespace AposGameCheatSheet.AposGui
         }
         public virtual void Update() {
         }
-        public virtual void Draw(SpriteBatch s, Rectangle clipRect) {
+        public virtual void Draw(SpriteBatch s) {
         }
     }
 }

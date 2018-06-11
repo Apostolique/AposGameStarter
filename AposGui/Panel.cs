@@ -94,10 +94,9 @@ namespace AposGameCheatSheet.AposGui
                 e.Update();
             }
         }
-        public override void Draw(SpriteBatch s, Rectangle clipRect) {
-            clipRect = ClipRectangle(clipRect);
+        public override void Draw(SpriteBatch s) {
             foreach (Component e in children) {
-                e.Draw(s, clipRect);
+                e.Draw(s);
             }
         }
     }

@@ -155,7 +155,7 @@ namespace AposGameCheatSheet
         }
         public void DrawUI(SpriteBatch s) {
             Component currentPanel = menus[currentMenu].component;
-            currentPanel.Draw(s, new Rectangle(0, 0, Utility.WindowWidth, Utility.WindowHeight));
+            currentPanel.Draw(s);
         }
         private Component createButtonLabel(string text, Action<Button> a) {
             Button b = new ButtonLabel(text);
@@ -198,13 +198,11 @@ namespace AposGameCheatSheet
             }
             public override bool UpdateInput() {
                 bool used = base.UpdateInput();
-                return used || IsInside(new Point(Input.NewMouse.X, Input.NewMouse.Y));
+                return used || IsInsideClip(new Point(Input.NewMouse.X, Input.NewMouse.Y));
             }
 
-            public override void Draw(SpriteBatch s, Rectangle clipRect) {
-                clipRect = ClipRectangle(clipRect);
-
-                s.FillRectangle(clipRect, Color.Black * 0.6f);
+            public override void Draw(SpriteBatch s) {
+                s.FillRectangle(ClippingRect, Color.Black * 0.6f);
                 //s.FillRectangle(new Rectangle(0, 0, 100, 100), Color.Black * 0.6f);
 
                 s.DrawLine(Left, Top, Right, Top, Color.Black, 2);
@@ -212,7 +210,7 @@ namespace AposGameCheatSheet
                 s.DrawLine(Left, Bottom, Right, Bottom, Color.Black, 2);
                 s.DrawLine(Left, Top, Left, Bottom, Color.Black, 2);
 
-                base.Draw(s, clipRect);
+                base.Draw(s);
             }
             public override int Width => Utility.WindowWidth;
             public override int Height => Utility.WindowHeight;

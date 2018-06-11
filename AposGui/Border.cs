@@ -68,6 +68,18 @@ namespace AposGameCheatSheet.AposGui
         public virtual int MarginBottom {
             get; set;
         }
+        public override Rectangle ClippingRect {
+            get {
+                return base.ClippingRect;
+            }
+            set {
+                base.ClippingRect = value;
+
+                if (Item != null) {
+                    Item.ClippingRect = base.ClippingRect;
+                }
+            }
+        }
         public override Component GetFinal() {
             if (Item != null) {
                 return Item;
@@ -80,9 +92,8 @@ namespace AposGameCheatSheet.AposGui
         public override void Update() {
             Item.Update();
         }
-        public override void Draw(SpriteBatch s, Rectangle clipRect) {
-            clipRect = ClipRectangle(clipRect);
-            Item.Draw(s, clipRect);
+        public override void Draw(SpriteBatch s) {
+            Item.Draw(s);
         }
         public override int PrefWidth => Item.PrefWidth + MarginLeft + MarginRight;
         public override int PrefHeight => Item.PrefHeight + MarginTop + MarginBottom;

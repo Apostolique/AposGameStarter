@@ -74,12 +74,24 @@ namespace AposGameCheatSheet.AposGui
                 }
             }
         }
+        public override Rectangle ClippingRect {
+            get {
+                return base.ClippingRect;
+            }
+            set {
+                base.ClippingRect = value;
+
+                if (Item != null) {
+                    Item.ClippingRect = base.ClippingRect;
+                }
+            }
+        }
         public void AddAction(Func<Button, bool> condition, Action<Button> bAction) {
             buttonActions.Add(new ButtonConditionAction(condition, bAction));
         }
         public override bool UpdateInput() {
             OldIsHovered = IsHovered;
-            IsHovered = IsInside(new Point(Input.NewMouse.X, Input.NewMouse.Y));
+            IsHovered = IsInsideClip(new Point(Input.NewMouse.X, Input.NewMouse.Y));
 
             bool isUsed = false;
 
@@ -92,9 +104,7 @@ namespace AposGameCheatSheet.AposGui
 
             return isUsed;
         }
-        public override void Draw(SpriteBatch s, Rectangle clipRect) {
-            clipRect = ClipRectangle(clipRect);
-
+        public override void Draw(SpriteBatch s) {
             if (ShowBox) {
                 if (IsHovered || HasFocus) {
                     s.FillRectangle(new RectangleF(Left, Top, Width, Height), new Color(20, 20, 20));
@@ -103,7 +113,7 @@ namespace AposGameCheatSheet.AposGui
                 }
             }
 
-            Item.Draw(s, clipRect);
+            Item.Draw(s);
 
             if (ShowBox && (IsHovered || HasFocus)) {
                 s.DrawLine(Left, Top, Left, Bottom, Color.White, 2);
