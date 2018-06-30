@@ -39,10 +39,10 @@ namespace AposGameCheatSheet
         Dictionary<MenuScreens, ComponentFocus> menus;
         MenuScreens currentMenu;
 
-        Func<Button, bool> hoverFocus = (Button b) => !b.OldIsHovered && b.IsHovered;
+        Func<Button, bool> hoverFocus = (Button b) => !b.OldIsHovered && b.IsHovered || !b.HasFocus && b.IsHovered && Input.OldMouse.Position != Input.NewMouse.Position;
         Action<Button> hoverAction;
 
-        Func<Button, bool> leftClick = (Button b) => b.IsHovered && Input.OldMouse.LeftButton == ButtonState.Released && Input.NewMouse.LeftButton == ButtonState.Pressed;
+        Func<Button, bool> leftClick = (Button b) => b.IsHovered && b.HasFocus && Input.OldMouse.LeftButton == ButtonState.Released && Input.NewMouse.LeftButton == ButtonState.Pressed;
         Func<Button, bool> gamePadAClick = (Button b) => b.HasFocus && Input.Capabilities.IsConnected && Input.Capabilities.HasAButton && Input.OldGamePad.Buttons.A == ButtonState.Released && Input.NewGamePad.Buttons.A == ButtonState.Pressed;
         Func<bool> previousFocusAction = () => Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton && Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Input.NewGamePad.ThumbSticks.Left.Y > 0;
         Func<bool> nextFocusAction = () => Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton && Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Input.NewGamePad.ThumbSticks.Left.Y < 0;
