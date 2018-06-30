@@ -20,7 +20,7 @@ namespace AposGameCheatSheet.AposGui
         public Button(Component iItem) {
             Item = iItem;
             buttonActions = new List<ButtonConditionAction>();
-            CanFocus = true;
+            IsFocusable = true;
             OldIsHovered = false;
             IsHovered = false;
             ShowBox = true;

@@ -224,7 +224,7 @@ namespace AposGameCheatSheet
                 }
 
                 Component possibleFocus = findFinal(component);
-                if (possibleFocus.CanFocus) {
+                if (possibleFocus.IsFocusable) {
                     focus = possibleFocus;
                     focus.HasFocus = true;
                 } else {
@@ -246,9 +246,9 @@ namespace AposGameCheatSheet
                     do {
                         currentFocus = currentFocus.GetPrevious();
                         currentFocus = findFinal(currentFocus);
-                    } while (!currentFocus.CanFocus && currentFocus != c);
+                    } while (!currentFocus.IsFocusable && currentFocus != c);
 
-                    if (currentFocus.CanFocus) {
+                    if (currentFocus.IsFocusable) {
                         currentFocus.HasFocus = true;
                         return currentFocus;
                     }
@@ -263,9 +263,9 @@ namespace AposGameCheatSheet
                     do {
                         currentFocus = currentFocus.GetNext();
                         currentFocus = findFinal(currentFocus);
-                    } while (!currentFocus.CanFocus && currentFocus != c);
+                    } while (!currentFocus.IsFocusable && currentFocus != c);
 
-                    if (currentFocus.CanFocus) {
+                    if (currentFocus.IsFocusable) {
                         currentFocus.HasFocus = true;
                         return currentFocus;
                     }

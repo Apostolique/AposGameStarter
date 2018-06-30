@@ -21,7 +21,7 @@ namespace AposGameCheatSheet.AposGui
             Width = 100;
             Height = 100;
             Parent = null;
-            CanFocus = false;
+            IsFocusable = false;
             _clippingRect = Maybe<Rectangle>.Nothing;
         }
         public virtual Point Position {
@@ -55,7 +55,7 @@ namespace AposGameCheatSheet.AposGui
         public virtual Component Parent {
             get; set;
         }
-        public virtual bool CanFocus {
+        public virtual bool IsFocusable {
             get; set;
         }
         public virtual bool HasFocus {
