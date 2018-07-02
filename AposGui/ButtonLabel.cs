@@ -21,27 +21,5 @@ namespace AposGameCheatSheet.AposGui
         public ButtonLabel(Label text) {
             Item = text;
         }
-        public override void Draw(SpriteBatch s) {
-            if (ShowBox) {
-                if (HasFocus) {
-                    s.FillRectangle(new RectangleF(Left, Top, Width, Height), new Color(20, 20, 20));
-                } else {
-                    s.FillRectangle(new RectangleF(Left, Top, Width, Height), Color.Black);
-                }
-            }
-
-            if (ShowBox || HasFocus) {
-                Item.DrawActive(s);
-            } else {
-                Item.Draw(s);
-            }
-
-            if (ShowBox && HasFocus) {
-                s.DrawLine(Left, Top, Left, Bottom, Color.White, 2);
-                s.DrawLine(Right, Top, Right, Bottom, Color.White, 2);
-                s.DrawLine(Left, Top, Right, Top, Color.White, 2);
-                s.DrawLine(Left, Bottom, Right, Bottom, Color.White, 2);
-            }
-        }
     }
 }
