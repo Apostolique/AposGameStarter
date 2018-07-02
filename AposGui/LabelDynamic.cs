@@ -27,9 +27,6 @@ namespace AposGameCheatSheet.AposGui
                 return Size2.Empty;
             }
         }
-        public override void Draw(SpriteBatch s) {
-            Draw(s, Color.White);
-        }
         public override void Draw(SpriteBatch s, Color c) {
             int halfWidth = Width / 2;
             int textHalfWidth = PrefWidth / 2;

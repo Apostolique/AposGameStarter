@@ -95,6 +95,9 @@ namespace AposGameCheatSheet.AposGui
         public override void Draw(SpriteBatch s) {
             Item.Draw(s);
         }
+        public override void DrawActive(SpriteBatch s) {
+            Item.DrawActive(s);
+        }
         public override int PrefWidth => Item.PrefWidth + MarginLeft + MarginRight;
         public override int PrefHeight => Item.PrefHeight + MarginTop + MarginBottom;
     }

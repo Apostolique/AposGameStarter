@@ -147,5 +147,8 @@ namespace AposGameCheatSheet.AposGui
         }
         public virtual void Draw(SpriteBatch s) {
         }
+        public virtual void DrawActive(SpriteBatch s) {
+            Draw(s);
+        }
     }
 }

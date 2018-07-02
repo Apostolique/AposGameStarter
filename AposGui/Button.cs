@@ -113,7 +113,11 @@ namespace AposGameCheatSheet.AposGui
                 }
             }
 
-            Item.Draw(s);
+            if (ShowBox || HasFocus) {
+                Item.DrawActive(s);
+            } else {
+                Item.Draw(s);
+            }
 
             if (ShowBox && (HasFocus)) {
                 s.DrawLine(Left, Top, Left, Bottom, Color.White, 2);

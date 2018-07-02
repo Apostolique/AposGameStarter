@@ -21,6 +21,23 @@ namespace AposGameCheatSheet
                 currentPanel.focus = b;
                 currentPanel.focus.HasFocus = true;
             };
+            hoverFocus = (Button b) =>
+                !b.OldIsHovered && b.IsHovered ||
+                !b.HasFocus && b.IsHovered && Input.OldMouse.Position != Input.NewMouse.Position;
+            leftClick = (Button b) =>
+                b.IsHovered && b.HasFocus &&
+                Input.OldMouse.LeftButton == ButtonState.Released && Input.NewMouse.LeftButton == ButtonState.Pressed;
+            gamePadAClick = (Button b) =>
+                b.HasFocus && Input.Capabilities.IsConnected && Input.Capabilities.HasAButton && Input.OldGamePad.Buttons.A == ButtonState.Released && Input.NewGamePad.Buttons.A == ButtonState.Pressed;
+            previousFocusAction = () =>
+                Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
+                Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Input.NewGamePad.ThumbSticks.Left.Y > 0;
+            nextFocusAction = () =>
+                Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
+                Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Input.NewGamePad.ThumbSticks.Left.Y < 0;
+            gamePadBClick = () =>
+                Input.Capabilities.IsConnected && Input.Capabilities.HasBButton &&
+                Input.OldGamePad.Buttons.B == ButtonState.Released && Input.NewGamePad.Buttons.B == ButtonState.Pressed;
 
             menus = new Dictionary<MenuScreens, ComponentFocus>();
             menus.Add(MenuScreens.Main, setupMainMenu());
@@ -39,14 +56,14 @@ namespace AposGameCheatSheet
         Dictionary<MenuScreens, ComponentFocus> menus;
         MenuScreens currentMenu;
 
-        Func<Button, bool> hoverFocus = (Button b) => !b.OldIsHovered && b.IsHovered || !b.HasFocus && b.IsHovered && Input.OldMouse.Position != Input.NewMouse.Position;
+        Func<Button, bool> hoverFocus;
         Action<Button> hoverAction;
 
-        Func<Button, bool> leftClick = (Button b) => b.IsHovered && b.HasFocus && Input.OldMouse.LeftButton == ButtonState.Released && Input.NewMouse.LeftButton == ButtonState.Pressed;
-        Func<Button, bool> gamePadAClick = (Button b) => b.HasFocus && Input.Capabilities.IsConnected && Input.Capabilities.HasAButton && Input.OldGamePad.Buttons.A == ButtonState.Released && Input.NewGamePad.Buttons.A == ButtonState.Pressed;
-        Func<bool> previousFocusAction = () => Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton && Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Input.NewGamePad.ThumbSticks.Left.Y > 0;
-        Func<bool> nextFocusAction = () => Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton && Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Input.NewGamePad.ThumbSticks.Left.Y < 0;
-        Func<bool> gamePadBClick = () => Input.Capabilities.IsConnected && Input.Capabilities.HasBButton && Input.OldGamePad.Buttons.B == ButtonState.Released && Input.NewGamePad.Buttons.B == ButtonState.Pressed;
+        Func<Button, bool> leftClick;
+        Func<Button, bool> gamePadAClick;
+        Func<bool> previousFocusAction;
+        Func<bool> nextFocusAction;
+        Func<bool> gamePadBClick;
 
         private ComponentFocus setupMainMenu() {
             MenuPanel mp = new MenuPanel();
@@ -158,40 +175,50 @@ namespace AposGameCheatSheet
             currentPanel.Draw(s);
         }
         private Component createButtonLabel(string text, Action<Button> a) {
-            Button b = new ButtonLabel(text);
+            Label l = new Label(text);
+            l.ActiveColor = Color.White;
+            l.NormalColor = new Color(150, 150, 150);
+            Border border = new Border(l, 20, 20, 20, 20);
+            Button b = new Button(border);
             b.ShowBox = false;
             b.AddAction(leftClick, a);
             b.AddAction(gamePadAClick, a);
             b.AddAction(hoverFocus, hoverAction);
 
-            Border border = new Border(b, 20, 20, 20, 20);
-            return border;
+            return b;
         }
         private Component createButtonLabel(string text) {
-            Button b = new ButtonLabel(text);
+            Label l = new Label(text);
+            l.ActiveColor = Color.White;
+            l.NormalColor = new Color(150, 150, 150);
+            Border border = new Border(l, 20, 20, 20, 20);
+            Button b = new Button(border);
             b.ShowBox = false;
 
-            Border border = new Border(b, 20, 20, 20, 20);
-            return border;
+            return b;
         }
         private Component createButtonLabelDynamic(Func<string> text, Action<Button> a) {
             LabelDynamic ld = new LabelDynamic(text);
-            Button b = new ButtonLabel(ld);
+            ld.ActiveColor = Color.White;
+            ld.NormalColor = new Color(150, 150, 150);
+            Border border = new Border(ld, 20, 20, 20, 20);
+            Button b = new Button(border);
             b.ShowBox = false;
             b.AddAction(leftClick, a);
             b.AddAction(gamePadAClick, a);
             b.AddAction(hoverFocus, hoverAction);
 
-            Border border = new Border(b, 20, 20, 20, 20);
-            return border;
+            return b;
         }
         private Component createButtonLabelDynamic(Func<string> text) {
             LabelDynamic ld = new LabelDynamic(text);
-            Button b = new ButtonLabel(ld);
+            ld.ActiveColor = Color.White;
+            ld.NormalColor = new Color(150, 150, 150);
+            Border border = new Border(ld, 20, 20, 20, 20);
+            Button b = new Button(border);
             b.ShowBox = false;
 
-            Border border = new Border(b, 20, 20, 20, 20);
-            return border;
+            return b;
         }
         private class MenuPanel : PanelVerticalScroll {
             public MenuPanel() {

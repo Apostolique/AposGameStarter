@@ -31,9 +31,9 @@ namespace AposGameCheatSheet.AposGui
             }
 
             if (ShowBox || HasFocus) {
-                Item.Draw(s);
+                Item.DrawActive(s);
             } else {
-                ((Label)Item).Draw(s, new Color(150, 150, 150));
+                Item.Draw(s);
             }
 
             if (ShowBox && HasFocus) {

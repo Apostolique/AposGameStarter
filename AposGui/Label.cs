@@ -16,8 +16,6 @@ namespace AposGameCheatSheet.AposGui
     /// </summary>
     class Label : Component
     {
-        string text;
-        Size2 textSize;
         public Label() : this("Text Missing") {
         }
         public Label(string iText) {
@@ -25,9 +23,24 @@ namespace AposGameCheatSheet.AposGui
             textSize = Assets.bitFont.MeasureString(text);
             Width = PrefWidth;
             Height = PrefHeight;
+
+            NormalColor = Color.White;
+            ActiveColor = new Color(150, 150, 150);
         }
+        string text;
+        Size2 textSize;
+        public Color NormalColor {
+            get; set;
+        }
+        public Color ActiveColor {
+            get; set;
+        }
+
         public override void Draw(SpriteBatch s) {
-            Draw(s, Color.White);
+            Draw(s, NormalColor);
+        }
+        public override void DrawActive(SpriteBatch s) {
+            Draw(s, ActiveColor);
         }
         public virtual void Draw(SpriteBatch s, Color c) {
             int halfWidth = Width / 2;
