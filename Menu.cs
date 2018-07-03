@@ -26,15 +26,21 @@ namespace AposGameCheatSheet
                 !b.HasFocus && b.IsHovered && Input.OldMouse.Position != Input.NewMouse.Position;
             leftClick = (Button b) =>
                 b.IsHovered && b.HasFocus &&
-                Input.OldMouse.LeftButton == ButtonState.Released && Input.NewMouse.LeftButton == ButtonState.Pressed;
+                Input.OldMouse.LeftButton == ButtonState.Pressed && Input.NewMouse.LeftButton == ButtonState.Released;
+            keyboardClick = (Button b) =>
+                b.HasFocus &&
+                (Input.OldKeyboard.IsKeyUp(Keys.Space) && Input.NewKeyboard.IsKeyDown(Keys.Space) ||
+                Input.OldKeyboard.IsKeyUp(Keys.Enter) && Input.NewKeyboard.IsKeyDown(Keys.Enter));
             gamePadAClick = (Button b) =>
                 b.HasFocus && Input.Capabilities.IsConnected && Input.Capabilities.HasAButton && Input.OldGamePad.Buttons.A == ButtonState.Released && Input.NewGamePad.Buttons.A == ButtonState.Pressed;
             previousFocusAction = () =>
                 Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
-                Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Input.NewGamePad.ThumbSticks.Left.Y > 0;
+                Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Input.NewGamePad.ThumbSticks.Left.Y > 0 ||
+                Input.OldKeyboard.IsKeyUp(Keys.Up) && Input.NewKeyboard.IsKeyDown(Keys.Up);
             nextFocusAction = () =>
                 Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
-                Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Input.NewGamePad.ThumbSticks.Left.Y < 0;
+                Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Input.NewGamePad.ThumbSticks.Left.Y < 0 ||
+                Input.OldKeyboard.IsKeyUp(Keys.Down) && Input.NewKeyboard.IsKeyDown(Keys.Down);
             gamePadBClick = () =>
                 Input.Capabilities.IsConnected && Input.Capabilities.HasBButton &&
                 Input.OldGamePad.Buttons.B == ButtonState.Released && Input.NewGamePad.Buttons.B == ButtonState.Pressed;
@@ -60,6 +66,7 @@ namespace AposGameCheatSheet
         Action<Button> hoverAction;
 
         Func<Button, bool> leftClick;
+        Func<Button, bool> keyboardClick;
         Func<Button, bool> gamePadAClick;
         Func<bool> previousFocusAction;
         Func<bool> nextFocusAction;
@@ -182,6 +189,7 @@ namespace AposGameCheatSheet
             Button b = new Button(border);
             b.ShowBox = false;
             b.AddAction(leftClick, a);
+            b.AddAction(keyboardClick, a);
             b.AddAction(gamePadAClick, a);
             b.AddAction(hoverFocus, hoverAction);
 
@@ -205,6 +213,7 @@ namespace AposGameCheatSheet
             Button b = new Button(border);
             b.ShowBox = false;
             b.AddAction(leftClick, a);
+            b.AddAction(keyboardClick, a);
             b.AddAction(gamePadAClick, a);
             b.AddAction(hoverFocus, hoverAction);
 
