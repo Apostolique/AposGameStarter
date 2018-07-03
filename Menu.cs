@@ -27,12 +27,11 @@ namespace AposGameCheatSheet
             leftClick = (Button b) =>
                 b.IsHovered && b.HasFocus &&
                 Input.OldMouse.LeftButton == ButtonState.Pressed && Input.NewMouse.LeftButton == ButtonState.Released;
-            keyboardClick = (Button b) =>
+            selectAction = (Button b) =>
                 b.HasFocus &&
-                (Input.OldKeyboard.IsKeyUp(Keys.Space) && Input.NewKeyboard.IsKeyDown(Keys.Space) ||
+                (Input.OldGamePad.Buttons.A == ButtonState.Released && Input.NewGamePad.Buttons.A == ButtonState.Pressed ||
+                Input.OldKeyboard.IsKeyUp(Keys.Space) && Input.NewKeyboard.IsKeyDown(Keys.Space) ||
                 Input.OldKeyboard.IsKeyUp(Keys.Enter) && Input.NewKeyboard.IsKeyDown(Keys.Enter));
-            gamePadAClick = (Button b) =>
-                b.HasFocus && Input.Capabilities.IsConnected && Input.Capabilities.HasAButton && Input.OldGamePad.Buttons.A == ButtonState.Released && Input.NewGamePad.Buttons.A == ButtonState.Pressed;
             previousFocusAction = () =>
                 Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
                 Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Input.NewGamePad.ThumbSticks.Left.Y > 0 ||
@@ -41,9 +40,10 @@ namespace AposGameCheatSheet
                 Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
                 Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Input.NewGamePad.ThumbSticks.Left.Y < 0 ||
                 Input.OldKeyboard.IsKeyUp(Keys.Down) && Input.NewKeyboard.IsKeyDown(Keys.Down);
-            gamePadBClick = () =>
+            backAction = () =>
                 Input.Capabilities.IsConnected && Input.Capabilities.HasBButton &&
-                Input.OldGamePad.Buttons.B == ButtonState.Released && Input.NewGamePad.Buttons.B == ButtonState.Pressed;
+                Input.OldGamePad.Buttons.B == ButtonState.Released && Input.NewGamePad.Buttons.B == ButtonState.Pressed ||
+                Input.OldKeyboard.IsKeyUp(Keys.Escape) && Input.NewKeyboard.IsKeyDown(Keys.Escape);
 
             menus = new Dictionary<MenuScreens, ComponentFocus>();
             menus.Add(MenuScreens.Main, setupMainMenu());
@@ -66,11 +66,10 @@ namespace AposGameCheatSheet
         Action<Button> hoverAction;
 
         Func<Button, bool> leftClick;
-        Func<Button, bool> keyboardClick;
-        Func<Button, bool> gamePadAClick;
+        Func<Button, bool> selectAction;
         Func<bool> previousFocusAction;
         Func<bool> nextFocusAction;
-        Func<bool> gamePadBClick;
+        Func<bool> backAction;
 
         private ComponentFocus setupMainMenu() {
             MenuPanel mp = new MenuPanel();
@@ -163,7 +162,7 @@ namespace AposGameCheatSheet
             if (previousFocusAction()) {
                 currentPanel.focus = currentPanel.findPrevious(currentPanel.focus);
             }
-            if (gamePadBClick()) {
+            if (backAction()) {
                 if (currentMenu == MenuScreens.Main) {
                     selectMenu(MenuScreens.Quit);
                 } else {
@@ -189,8 +188,7 @@ namespace AposGameCheatSheet
             Button b = new Button(border);
             b.ShowBox = false;
             b.AddAction(leftClick, a);
-            b.AddAction(keyboardClick, a);
-            b.AddAction(gamePadAClick, a);
+            b.AddAction(selectAction, a);
             b.AddAction(hoverFocus, hoverAction);
 
             return b;
@@ -213,8 +211,7 @@ namespace AposGameCheatSheet
             Button b = new Button(border);
             b.ShowBox = false;
             b.AddAction(leftClick, a);
-            b.AddAction(keyboardClick, a);
-            b.AddAction(gamePadAClick, a);
+            b.AddAction(selectAction, a);
             b.AddAction(hoverFocus, hoverAction);
 
             return b;
