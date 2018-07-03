@@ -24,14 +24,12 @@ namespace AposGameCheatSheet
             hoverFocus = (Button b) =>
                 !b.OldIsHovered && b.IsHovered ||
                 !b.HasFocus && b.IsHovered && Input.OldMouse.Position != Input.NewMouse.Position;
-            leftClick = (Button b) =>
-                b.IsHovered && b.HasFocus &&
-                Input.OldMouse.LeftButton == ButtonState.Pressed && Input.NewMouse.LeftButton == ButtonState.Released;
             selectAction = (Button b) =>
                 b.HasFocus &&
                 (Input.OldGamePad.Buttons.A == ButtonState.Released && Input.NewGamePad.Buttons.A == ButtonState.Pressed ||
                 Input.OldKeyboard.IsKeyUp(Keys.Space) && Input.NewKeyboard.IsKeyDown(Keys.Space) ||
-                Input.OldKeyboard.IsKeyUp(Keys.Enter) && Input.NewKeyboard.IsKeyDown(Keys.Enter));
+                Input.OldKeyboard.IsKeyUp(Keys.Enter) && Input.NewKeyboard.IsKeyDown(Keys.Enter) ||
+                b.IsHovered && Input.OldMouse.LeftButton == ButtonState.Pressed && Input.NewMouse.LeftButton == ButtonState.Released);
             previousFocusAction = () =>
                 Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
                 Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Input.NewGamePad.ThumbSticks.Left.Y > 0 ||
@@ -65,7 +63,6 @@ namespace AposGameCheatSheet
         Func<Button, bool> hoverFocus;
         Action<Button> hoverAction;
 
-        Func<Button, bool> leftClick;
         Func<Button, bool> selectAction;
         Func<bool> previousFocusAction;
         Func<bool> nextFocusAction;
@@ -187,7 +184,6 @@ namespace AposGameCheatSheet
             Border border = new Border(l, 20, 20, 20, 20);
             Button b = new Button(border);
             b.ShowBox = false;
-            b.AddAction(leftClick, a);
             b.AddAction(selectAction, a);
             b.AddAction(hoverFocus, hoverAction);
 
@@ -210,7 +206,6 @@ namespace AposGameCheatSheet
             Border border = new Border(ld, 20, 20, 20, 20);
             Button b = new Button(border);
             b.ShowBox = false;
-            b.AddAction(leftClick, a);
             b.AddAction(selectAction, a);
             b.AddAction(hoverFocus, hoverAction);
 
