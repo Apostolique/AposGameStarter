@@ -122,12 +122,8 @@ namespace AposGameCheatSheet
             return new ComponentFocus(mp);
         }
         private ComponentFocus setupQuitConfirm() {
-            Panel quitMenu = new ScreenPanel();
-
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
-
-            quitMenu.Add(mp);
 
             Label l1 = new Label("Do you really want to quit?");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
@@ -139,7 +135,7 @@ namespace AposGameCheatSheet
                 selectMenu(MenuScreens.Main);
             }));
 
-            return new ComponentFocus(quitMenu);
+            return new ComponentFocus(mp);
         }
         private void selectMenu(MenuScreens ms) {
             currentMenu = ms;
