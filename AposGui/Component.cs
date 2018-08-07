@@ -88,6 +88,9 @@ namespace AposGameCheatSheet.AposGui
         public virtual Component GetFinal() {
             return this;
         }
+        public virtual Component GetFinalInverse() {
+            return this;
+        }
 
         public Rectangle ClipRectangle(Rectangle rect1) {
             return ClipRectangle(rect1, BoundingRect);

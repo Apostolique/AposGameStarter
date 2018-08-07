@@ -86,6 +86,12 @@ namespace AposGameCheatSheet.AposGui
             }
             return this;
         }
+        public override Component GetFinalInverse() {
+            if (Item != null) {
+                return Item;
+            }
+            return this;
+        }
         public override bool UpdateInput() {
             return Item.UpdateInput();
         }

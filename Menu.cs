@@ -269,7 +269,7 @@ namespace AposGameCheatSheet
 
                     do {
                         currentFocus = currentFocus.GetPrevious();
-                        currentFocus = findFinal(currentFocus);
+                        currentFocus = findFinalInverse(currentFocus);
                     } while (!currentFocus.IsFocusable && currentFocus != c);
 
                     if (currentFocus.IsFocusable) {
@@ -302,6 +302,16 @@ namespace AposGameCheatSheet
                 do {
                     previousFinal = currentFinal;
                     currentFinal = previousFinal.GetFinal();
+                } while (currentFinal != previousFinal && currentFinal != c);
+
+                return currentFinal;
+            }
+            public Component findFinalInverse(Component c) {
+                Component previousFinal;
+                Component currentFinal = c;
+                do {
+                    previousFinal = currentFinal;
+                    currentFinal = previousFinal.GetFinalInverse();
                 } while (currentFinal != previousFinal && currentFinal != c);
 
                 return currentFinal;

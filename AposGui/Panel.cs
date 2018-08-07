@@ -69,7 +69,13 @@ namespace AposGameCheatSheet.AposGui
         }
         public override Component GetFinal() {
             if (children.Count > 0) {
-                return children[0];
+                return children.First();
+            }
+            return this;
+        }
+        public override Component GetFinalInverse() {
+            if (children.Count > 0) {
+                return children.Last();
             }
             return this;
         }
