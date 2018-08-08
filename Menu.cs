@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AposGameCheatSheet.AposGui;
+using AposGameStarter.AposGui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 
-namespace AposGameCheatSheet
+namespace AposGameStarter
 {
     /// <summary>
     /// Goal: Interface to modify the game settings.
@@ -72,7 +72,7 @@ namespace AposGameCheatSheet
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
 
-            Label l1 = new Label("AposGameCheatSheet");
+            Label l1 = new Label("AposGameStarter");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
 

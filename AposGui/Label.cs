@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 
-namespace AposGameCheatSheet.AposGui
+namespace AposGameStarter.AposGui
 {
     /// <summary>
     /// Goal: A text component.

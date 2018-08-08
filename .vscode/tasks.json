@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/AposGameCheatSheet.csproj"
+                "${workspaceFolder}/AposGameStarter.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

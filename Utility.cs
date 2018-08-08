@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace AposGameCheatSheet
+namespace AposGameStarter
 {
     static class Utility
     {

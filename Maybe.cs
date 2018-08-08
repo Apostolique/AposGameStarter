@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
 
-namespace AposGameCheatSheet
+namespace AposGameStarter
 {
     /// <summary>
     /// The option type; explicitly represents nothing-or-thing nature of a value. 

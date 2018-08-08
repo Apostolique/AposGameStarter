@@ -1,10 +1,10 @@
 ﻿using System;
-using AposGameCheatSheet.AposGui;
+using AposGameStarter.AposGui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace AposGameCheatSheet
+namespace AposGameStarter
 {
     public class Core : Game
     {

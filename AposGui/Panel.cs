@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 
-namespace AposGameCheatSheet.AposGui
+namespace AposGameStarter.AposGui
 {
     /// <summary>
     /// Goal: Container that can hold Components.

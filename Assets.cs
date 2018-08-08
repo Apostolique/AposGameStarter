@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.BitmapFonts;
 
-namespace AposGameCheatSheet
+namespace AposGameStarter
 {
     static class Assets
     {

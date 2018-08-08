@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace AposGameCheatSheet
+namespace AposGameStarter
 {
     public static class Input
     {

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 
-namespace AposGameCheatSheet.AposGui
+namespace AposGameStarter.AposGui
 {
     /// <summary>
     /// Goal: Stacks components on top of each others and centers them inside the panel.

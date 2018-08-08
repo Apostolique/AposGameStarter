@@ -11,26 +11,26 @@ using MonoGame.Extended;
 namespace AposGameStarter.AposGui
 {
     /// <summary>
-    /// Goal: A button component that handles actions.
+    /// Goal: A checkbox component that handles actions.
     /// </summary>
-    class Button : Component
+    class CheckBox : Component
     {
-        public Button() : this(new Component()) {
+        public CheckBox() : this(new Component()) {
         }
-        public Button(Component iItem) {
+        public CheckBox(Component iItem) {
             Item = iItem;
-            buttonActions = new List<ButtonConditionAction>();
+            checkBoxActions = new List<CheckBoxConditionAction>();
             IsFocusable = true;
             OldIsHovered = false;
             IsHovered = false;
             ShowBox = true;
         }
-        protected struct ButtonConditionAction {
-            public Func<Button, bool> condition;
-            public Action<Button> buttonAction;
-            public ButtonConditionAction(Func<Button, bool> iCondition, Action<Button> iButtonAction) {
+        protected struct CheckBoxConditionAction {
+            public Func<CheckBox, bool> condition;
+            public Action<CheckBox> checkBoxAction;
+            public CheckBoxConditionAction(Func<CheckBox, bool> iCondition, Action<CheckBox> iCheckBoxAction) {
                 condition = iCondition;
-                buttonAction = iButtonAction;
+                checkBoxAction = iCheckBoxAction;
             }
         }
         public virtual Component Item {
@@ -45,7 +45,7 @@ namespace AposGameStarter.AposGui
         public virtual bool ShowBox {
             get; set;
         }
-        protected List<ButtonConditionAction> buttonActions;
+        protected List<CheckBoxConditionAction> checkBoxActions;
 
         public override Point Position {
             get => base.Position;
@@ -86,8 +86,8 @@ namespace AposGameStarter.AposGui
                 }
             }
         }
-        public void AddAction(Func<Button, bool> condition, Action<Button> bAction) {
-            buttonActions.Add(new ButtonConditionAction(condition, bAction));
+        public void AddAction(Func<CheckBox, bool> condition, Action<CheckBox> bAction) {
+            checkBoxActions.Add(new CheckBoxConditionAction(condition, bAction));
         }
         public override bool UpdateInput() {
             OldIsHovered = IsHovered;
@@ -95,9 +95,9 @@ namespace AposGameStarter.AposGui
 
             bool isUsed = false;
 
-            foreach (ButtonConditionAction bca in buttonActions) {
+            foreach (CheckBoxConditionAction bca in checkBoxActions) {
                 if (bca.condition(this)) {
-                    bca.buttonAction(this);
+                    bca.checkBoxAction(this);
                     isUsed = true;
                 }
             }
@@ -106,20 +106,16 @@ namespace AposGameStarter.AposGui
         }
         public override void Draw(SpriteBatch s) {
             if (ShowBox) {
-                if (HasFocus) {
+                if (IsHovered || HasFocus) {
                     s.FillRectangle(new RectangleF(Left, Top, Width, Height), new Color(20, 20, 20));
                 } else {
                     s.FillRectangle(new RectangleF(Left, Top, Width, Height), Color.Black);
                 }
             }
 
-            if (ShowBox || HasFocus) {
-                Item.DrawActive(s);
-            } else {
-                Item.Draw(s);
-            }
+            Item.Draw(s);
 
-            if (ShowBox && HasFocus) {
+            if (ShowBox && (IsHovered || HasFocus)) {
                 s.DrawLine(Left, Top, Left, Bottom, Color.White, 2);
                 s.DrawLine(Right, Top, Right, Bottom, Color.White, 2);
                 s.DrawLine(Left, Top, Right, Top, Color.White, 2);

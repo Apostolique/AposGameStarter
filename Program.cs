@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AposGameCheatSheet
+namespace AposGameStarter
 {
     public static class Program
     {

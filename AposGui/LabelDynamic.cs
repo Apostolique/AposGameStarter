@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 
-namespace AposGameCheatSheet.AposGui
+namespace AposGameStarter.AposGui
 {
     class LabelDynamic : Label
     {
