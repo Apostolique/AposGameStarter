@@ -1,5 +1,5 @@
 ﻿using System;
-using AposGameStarter.AposGui;
+using AposGui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

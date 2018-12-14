@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AposGameStarter.AposGui;
+using AposGui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -26,21 +26,21 @@ namespace AposGameStarter
                 !b.HasFocus && b.IsHovered && Input.OldMouse.Position != Input.NewMouse.Position;
             selectAction = (Button b) =>
                 b.HasFocus &&
-                (Input.OldGamePad.Buttons.A == ButtonState.Released && Input.NewGamePad.Buttons.A == ButtonState.Pressed ||
+                (Input.OldGamePad[0].Buttons.A == ButtonState.Released && Input.NewGamePad[0].Buttons.A == ButtonState.Pressed ||
                 Input.OldKeyboard.IsKeyUp(Keys.Space) && Input.NewKeyboard.IsKeyDown(Keys.Space) ||
                 Input.OldKeyboard.IsKeyUp(Keys.Enter) && Input.NewKeyboard.IsKeyDown(Keys.Enter) ||
                 b.IsHovered && Input.OldMouse.LeftButton == ButtonState.Pressed && Input.NewMouse.LeftButton == ButtonState.Released);
             previousFocusAction = () =>
                 Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
-                Input.OldGamePad.ThumbSticks.Left.Y <= 0 && Input.NewGamePad.ThumbSticks.Left.Y > 0 ||
+                Input.OldGamePad[0].ThumbSticks.Left.Y <= 0 && Input.NewGamePad[0].ThumbSticks.Left.Y > 0 ||
                 Input.OldKeyboard.IsKeyUp(Keys.Up) && Input.NewKeyboard.IsKeyDown(Keys.Up);
             nextFocusAction = () =>
                 Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
-                Input.OldGamePad.ThumbSticks.Left.Y >= 0 && Input.NewGamePad.ThumbSticks.Left.Y < 0 ||
+                Input.OldGamePad[0].ThumbSticks.Left.Y >= 0 && Input.NewGamePad[0].ThumbSticks.Left.Y < 0 ||
                 Input.OldKeyboard.IsKeyUp(Keys.Down) && Input.NewKeyboard.IsKeyDown(Keys.Down);
             backAction = () =>
                 Input.Capabilities.IsConnected && Input.Capabilities.HasBButton &&
-                Input.OldGamePad.Buttons.B == ButtonState.Released && Input.NewGamePad.Buttons.B == ButtonState.Pressed ||
+                Input.OldGamePad[0].Buttons.B == ButtonState.Released && Input.NewGamePad[0].Buttons.B == ButtonState.Pressed ||
                 Input.OldKeyboard.IsKeyUp(Keys.Escape) && Input.NewKeyboard.IsKeyDown(Keys.Escape);
 
             menus = new Dictionary<MenuScreens, ComponentFocus>();
@@ -72,7 +72,7 @@ namespace AposGameStarter
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
 
-            Label l1 = new Label("AposGameStarter");
+            Label l1 = new Label(Assets.bitFont, "AposGameStarter");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
 
@@ -94,7 +94,7 @@ namespace AposGameStarter
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
 
-            Label l1 = new Label("Settings");
+            Label l1 = new Label(Assets.bitFont, "Settings");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
             mp.Add(createButtonLabel("Back", delegate(Button b) {
@@ -107,7 +107,7 @@ namespace AposGameStarter
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
 
-            Label l1 = new Label("Debug");
+            Label l1 = new Label(Assets.bitFont, "Debug");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
             mp.Add(createButtonLabelDynamic(delegate() {
@@ -125,7 +125,7 @@ namespace AposGameStarter
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
 
-            Label l1 = new Label("Do you really want to quit?");
+            Label l1 = new Label(Assets.bitFont, "Do you really want to quit?");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
             mp.Add(createButtonLabel("Yes", delegate(Button b) {
@@ -174,7 +174,7 @@ namespace AposGameStarter
             currentPanel.Draw(s);
         }
         private Component createButtonLabel(string text, Action<Button> a) {
-            Label l = new Label(text);
+            Label l = new Label(Assets.bitFont, text);
             l.ActiveColor = Color.White;
             l.NormalColor = new Color(150, 150, 150);
             Border border = new Border(l, 20, 20, 20, 20);
@@ -186,7 +186,7 @@ namespace AposGameStarter
             return b;
         }
         private Component createButtonLabel(string text) {
-            Label l = new Label(text);
+            Label l = new Label(Assets.bitFont, text);
             l.ActiveColor = Color.White;
             l.NormalColor = new Color(150, 150, 150);
             Border border = new Border(l, 20, 20, 20, 20);
@@ -196,7 +196,7 @@ namespace AposGameStarter
             return b;
         }
         private Component createButtonLabelDynamic(Func<string> text, Action<Button> a) {
-            LabelDynamic ld = new LabelDynamic(text);
+            LabelDynamic ld = new LabelDynamic(Assets.bitFont, text);
             ld.ActiveColor = Color.White;
             ld.NormalColor = new Color(150, 150, 150);
             Border border = new Border(ld, 20, 20, 20, 20);
@@ -208,7 +208,7 @@ namespace AposGameStarter
             return b;
         }
         private Component createButtonLabelDynamic(Func<string> text) {
-            LabelDynamic ld = new LabelDynamic(text);
+            LabelDynamic ld = new LabelDynamic(Assets.bitFont, text);
             ld.ActiveColor = Color.White;
             ld.NormalColor = new Color(150, 150, 150);
             Border border = new Border(ld, 20, 20, 20, 20);
