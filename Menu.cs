@@ -15,13 +15,10 @@ namespace AposGameStarter
     class Menu
     {
         public Menu() {
-            hoverAction = delegate(Button b) {
-                ComponentFocus currentPanel = menus[currentMenu];
-                currentPanel.focus.HasFocus = false;
-                currentPanel.focus = b;
-                currentPanel.focus.HasFocus = true;
+            hoverFocus = delegate(Button b) {
+                menus[currentMenu].Focus = b;
             };
-            hoverFocus = (Button b) =>
+            hoverAction = (Button b) =>
                 !b.OldIsHovered && b.IsHovered ||
                 !b.HasFocus && b.IsHovered && Input.OldMouse.Position != Input.NewMouse.Position;
             selectAction = (Button b) =>
@@ -60,8 +57,8 @@ namespace AposGameStarter
         Dictionary<MenuScreens, ComponentFocus> menus;
         MenuScreens currentMenu;
 
-        Func<Button, bool> hoverFocus;
-        Action<Button> hoverAction;
+        Func<Button, bool> hoverAction;
+        Action<Button> hoverFocus;
 
         Func<Button, bool> selectAction;
         Func<bool> previousFocusAction;
@@ -88,7 +85,7 @@ namespace AposGameStarter
                 selectMenu(MenuScreens.Quit);
             }));
 
-            return new ComponentFocus(mp);
+            return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
         }
         private ComponentFocus setupSettingsMenu() {
             MenuPanel mp = new MenuPanel();
@@ -101,7 +98,7 @@ namespace AposGameStarter
                 selectMenu(MenuScreens.Main);
             }));
 
-            return new ComponentFocus(mp);
+            return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
         }
         private ComponentFocus setupDebugMenu() {
             MenuPanel mp = new MenuPanel();
@@ -119,7 +116,7 @@ namespace AposGameStarter
                 selectMenu(MenuScreens.Main);
             }));
             
-            return new ComponentFocus(mp);
+            return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
         }
         private ComponentFocus setupQuitConfirm() {
             MenuPanel mp = new MenuPanel();
@@ -135,7 +132,7 @@ namespace AposGameStarter
                 selectMenu(MenuScreens.Main);
             }));
 
-            return new ComponentFocus(mp);
+            return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
         }
         private void selectMenu(MenuScreens ms) {
             currentMenu = ms;
@@ -143,34 +140,33 @@ namespace AposGameStarter
 
         public void UpdateSetup() {
             foreach (KeyValuePair<MenuScreens, ComponentFocus> kvp in menus) {
-                kvp.Value.component.UpdateSetup();
+                kvp.Value.RootComponent.UpdateSetup();
             }
         }
         public void UpdateInput() {
             ComponentFocus currentPanel = menus[currentMenu];
 
-            if (nextFocusAction()) {
-                currentPanel.focus = currentPanel.findNext(currentPanel.focus);
-            }
-            if (previousFocusAction()) {
-                currentPanel.focus = currentPanel.findPrevious(currentPanel.focus);
-            }
+            bool usedInput = currentPanel.UpdateInput();
+
             if (backAction()) {
                 if (currentMenu == MenuScreens.Main) {
                     selectMenu(MenuScreens.Quit);
                 } else {
                     selectMenu(MenuScreens.Main);
                 }
+                usedInput = true;
             }
 
-            bool usedInput = currentPanel.component.UpdateInput();
+            if (!usedInput) {
+                usedInput = currentPanel.RootComponent.UpdateInput();
+            }
         }
         public void Update() {
-            Component currentPanel = menus[currentMenu].component;
+            Component currentPanel = menus[currentMenu].RootComponent;
             currentPanel.Update();
         }
         public void DrawUI(SpriteBatch s) {
-            Component currentPanel = menus[currentMenu].component;
+            Component currentPanel = menus[currentMenu].RootComponent;
             currentPanel.Draw(s);
         }
         private Component createButtonLabel(string text, Action<Button> a) {
@@ -181,7 +177,7 @@ namespace AposGameStarter
             Button b = new Button(border);
             b.ShowBox = false;
             b.AddAction(selectAction, a);
-            b.AddAction(hoverFocus, hoverAction);
+            b.AddAction(hoverAction, hoverFocus);
 
             return b;
         }
@@ -203,7 +199,7 @@ namespace AposGameStarter
             Button b = new Button(border);
             b.ShowBox = false;
             b.AddAction(selectAction, a);
-            b.AddAction(hoverFocus, hoverAction);
+            b.AddAction(hoverAction, hoverFocus);
 
             return b;
         }
@@ -239,64 +235,93 @@ namespace AposGameStarter
             public override int Width => Utility.WindowWidth;
             public override int Height => Utility.WindowHeight;
         }
-        private class ComponentFocus {
-            public ComponentFocus(Component c) {
-                component = c;
+        public class ComponentFocus {
+            public ComponentFocus(Component c, Func<bool> previousFocusAction, Func<bool> nextFocusAction) {
+                RootComponent = c;
 
-                if (focus != null) {
-                    focus.HasFocus = false;
-                }
+                Focus = findNext(RootComponent);
 
-                Component possibleFocus = findFinal(component);
-                if (possibleFocus.IsFocusable) {
-                    focus = possibleFocus;
-                    focus.HasFocus = true;
-                } else {
-                    focus = findNext(possibleFocus);
-                }
+                _previousFocusAction = previousFocusAction;
+                _nextFocusAction = nextFocusAction;
             }
-            public ComponentFocus(Component c, Component f) {
-                component = c;
-                focus = f;
+            public Component RootComponent {
+                get;
+                set;
             }
-            public Component component;
-            public Component focus;
-
-            public Component findPrevious(Component c) {
-                if (c != null) {
-                    Component currentFocus = c;
-                    currentFocus.HasFocus = false;
-
-                    do {
-                        currentFocus = currentFocus.GetPrevious();
-                        currentFocus = findFinalInverse(currentFocus);
-                    } while (!currentFocus.IsFocusable && currentFocus != c);
-
-                    if (currentFocus.IsFocusable) {
-                        currentFocus.HasFocus = true;
-                        return currentFocus;
+            public Component Focus {
+                get => _focus;
+                set {
+                    if (_focus != null) {
+                        _focus.HasFocus = false;
                     }
+                    _focus = value;
+                    if (_focus != null) {
+                        _focus.HasFocus = true;
+                    }
+                }
+            }
+
+            private Component _focus;
+            private Func<bool> _previousFocusAction;
+            private Func<bool> _nextFocusAction;
+
+            public bool UpdateInput() {
+                bool usedInput = false;
+                if (_nextFocusAction()) {
+                    FocusNext();
+                    usedInput = true;
+                }
+                if (_previousFocusAction()) {
+                    FocusPrevious();
+                    usedInput = true;
+                }
+
+                return usedInput;
+            }
+
+            public void FocusPrevious() {
+                Focus = findPrevious(Focus);
+            }
+            public void FocusNext() {
+                Focus = findNext(Focus);
+            }
+            private Component findPrevious(Component c) {
+                if (c == null) {
+                    c = RootComponent;
+                }
+                Component currentFocus = c;
+                currentFocus.HasFocus = false;
+
+                do {
+                    currentFocus = currentFocus.GetPrevious();
+                    currentFocus = findFinalInverse(currentFocus);
+                } while (!currentFocus.IsFocusable && currentFocus != c);
+
+                if (currentFocus.IsFocusable) {
+                    currentFocus.HasFocus = true;
+                    return currentFocus;
                 }
                 return null;
             }
-            public Component findNext(Component c) {
-                if (c != null) {
-                    Component currentFocus = c;
-                    currentFocus.HasFocus = false;
+            private Component findNext(Component c) {
+                if (c == null) {
+                    c = RootComponent;
+                }
+                Component currentFocus = c;
+                currentFocus.HasFocus = false;
 
-                    do {
-                        currentFocus = currentFocus.GetNext();
-                        currentFocus = findFinal(currentFocus);
-                    } while (!currentFocus.IsFocusable && currentFocus != c);
+                do {
+                    currentFocus = currentFocus.GetNext();
+                    currentFocus = findFinal(currentFocus);
+                } while (!currentFocus.IsFocusable && currentFocus != c);
 
-                    if (currentFocus.IsFocusable) {
-                        currentFocus.HasFocus = true;
-                        return currentFocus;
-                    }
+                if (currentFocus.IsFocusable) {
+                    currentFocus.HasFocus = true;
+                    return currentFocus;
                 }
                 return null;
             }
-            public Component findFinal(Component c) {
+            private Component findFinal(Component c) {
                 Component previousFinal;
                 Component currentFinal = c;
                 do {
@@ -306,7 +331,7 @@ namespace AposGameStarter
 
                 return currentFinal;
             }
-            public Component findFinalInverse(Component c) {
+            private Component findFinalInverse(Component c) {
                 Component previousFinal;
                 Component currentFinal = c;
                 do {
