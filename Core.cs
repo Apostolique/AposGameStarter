@@ -26,6 +26,8 @@ namespace AposGameStarter
             Utility.game = this;
             Utility.Window = Window;
             Input.Setup();
+            GuiHelper.Window = Window;
+            GuiHelper.Scale = 1f;
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += WindowClientChanged;
@@ -62,9 +64,7 @@ namespace AposGameStarter
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            s.Begin();
             menu.DrawUI(s);
-            s.End();
 
             base.Draw(gameTime);
         }

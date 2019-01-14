@@ -28,15 +28,12 @@ namespace AposGameStarter
                 Input.OldKeyboard.IsKeyUp(Keys.Enter) && Input.NewKeyboard.IsKeyDown(Keys.Enter) ||
                 b.IsHovered && Input.OldMouse.LeftButton == ButtonState.Pressed && Input.NewMouse.LeftButton == ButtonState.Released);
             previousFocusAction = () =>
-                Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
                 Input.OldGamePad[0].ThumbSticks.Left.Y <= 0 && Input.NewGamePad[0].ThumbSticks.Left.Y > 0 ||
                 Input.OldKeyboard.IsKeyUp(Keys.Up) && Input.NewKeyboard.IsKeyDown(Keys.Up);
             nextFocusAction = () =>
-                Input.Capabilities.IsConnected && Input.Capabilities.HasLeftStickButton &&
                 Input.OldGamePad[0].ThumbSticks.Left.Y >= 0 && Input.NewGamePad[0].ThumbSticks.Left.Y < 0 ||
                 Input.OldKeyboard.IsKeyUp(Keys.Down) && Input.NewKeyboard.IsKeyDown(Keys.Down);
             backAction = () =>
-                Input.Capabilities.IsConnected && Input.Capabilities.HasBButton &&
                 Input.OldGamePad[0].Buttons.B == ButtonState.Released && Input.NewGamePad[0].Buttons.B == ButtonState.Pressed ||
                 Input.OldKeyboard.IsKeyUp(Keys.Escape) && Input.NewKeyboard.IsKeyDown(Keys.Escape);
 
@@ -167,7 +164,7 @@ namespace AposGameStarter
         }
         public void DrawUI(SpriteBatch s) {
             Component currentPanel = menus[currentMenu].RootComponent;
-            currentPanel.Draw(s);
+            GuiHelper.DrawGui(s, currentPanel);
         }
         private Component createButtonLabel(string text, Action<Button> a) {
             Label l = new Label(Assets.bitFont, text);
@@ -218,11 +215,12 @@ namespace AposGameStarter
             }
             public override bool UpdateInput() {
                 bool used = base.UpdateInput();
-                return used || IsInsideClip(new Point(Input.NewMouse.X, Input.NewMouse.Y));
+                return used || IsInsideClip(GuiHelper.MouseToUI());
             }
 
             public override void Draw(SpriteBatch s) {
-                s.FillRectangle(ClippingRect, Color.Black * 0.6f);
+                SetScissor(s);
+                s.FillRectangle(BoundingRect, Color.Black * 0.6f);
                 //s.FillRectangle(new Rectangle(0, 0, 100, 100), Color.Black * 0.6f);
 
                 s.DrawLine(Left, Top, Right, Top, Color.Black, 2);
@@ -231,10 +229,10 @@ namespace AposGameStarter
                 s.DrawLine(Left, Top, Left, Bottom, Color.Black, 2);
 
                 base.Draw(s);
+                ResetScissor(s);
             }
-            public override int Width => Utility.WindowWidth;
-            public override int Height => Utility.WindowHeight;
+            public override int Width => GuiHelper.WindowWidth;
+            public override int Height => GuiHelper.WindowHeight;
         }
-
     }
 }
