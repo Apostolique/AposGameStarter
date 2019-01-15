@@ -15,7 +15,7 @@ namespace AposGameStarter
     class Menu
     {
         public Menu() {
-            hoverFocus = delegate(Button b) {
+            hoverFocus = (Button b) => {
                 menus[currentMenu].Focus = b;
             };
             hoverAction = (Button b) =>
@@ -70,15 +70,15 @@ namespace AposGameStarter
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
 
-            mp.Add(createButtonLabel("Resume Game", delegate(Button b) {
+            mp.Add(createButtonLabel("Resume Game", (Button b) => {
             }));
-            mp.Add(createButtonLabel("Settings", delegate(Button b) {
+            mp.Add(createButtonLabel("Settings", (Button b) => {
                 selectMenu(MenuScreens.Settings);
             }));
-            mp.Add(createButtonLabel("Debug", delegate(Button b) {
+            mp.Add(createButtonLabel("Debug", (Button b) => {
                 selectMenu(MenuScreens.Debug);
             }));
-            mp.Add(createButtonLabel("Quit", delegate(Button b) {
+            mp.Add(createButtonLabel("Quit", (Button b) => {
                 selectMenu(MenuScreens.Quit);
             }));
 
@@ -91,7 +91,7 @@ namespace AposGameStarter
             Label l1 = new Label(Assets.bitFont, "Settings");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
-            mp.Add(createButtonLabel("Back", delegate(Button b) {
+            mp.Add(createButtonLabel("Back", (Button b) => {
                 selectMenu(MenuScreens.Main);
             }));
 
@@ -104,12 +104,12 @@ namespace AposGameStarter
             Label l1 = new Label(Assets.bitFont, "Debug");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
-            mp.Add(createButtonLabelDynamic(delegate() {
+            mp.Add(createButtonLabelDynamic(() => {
                 return "Show path line: " + (Utility.showLine ? "true" : "false");
-            }, delegate(Button b) {
+            }, (Button b) => {
                 Utility.showLine = !Utility.showLine;
             }));
-            mp.Add(createButtonLabel("Back", delegate(Button b) {
+            mp.Add(createButtonLabel("Back", (Button b) => {
                 selectMenu(MenuScreens.Main);
             }));
             
@@ -122,10 +122,10 @@ namespace AposGameStarter
             Label l1 = new Label(Assets.bitFont, "Do you really want to quit?");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
-            mp.Add(createButtonLabel("Yes", delegate(Button b) {
+            mp.Add(createButtonLabel("Yes", (Button b) => {
                 Utility.game.Exit();
             }));
-            mp.Add(createButtonLabel("No", delegate(Button b) {
+            mp.Add(createButtonLabel("No", (Button b) => {
                 selectMenu(MenuScreens.Main);
             }));
 
