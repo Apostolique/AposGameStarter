@@ -25,7 +25,6 @@ namespace AposGameStarter
             // TODO: Add your initialization logic here
             Utility.game = this;
             Utility.Window = Window;
-            Input.Setup();
             GuiHelper.Window = Window;
             GuiHelper.Scale = 1f;
 
@@ -41,6 +40,7 @@ namespace AposGameStarter
 
             // TODO: use this.Content to load your game content here
             Assets.LoadAssets(Content);
+            GuiHelper.Font = Assets.Font;
             menu = new Menu();
         }
 

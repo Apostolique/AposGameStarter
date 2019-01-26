@@ -15,13 +15,14 @@ namespace AposGameStarter
     class Menu
     {
         public Menu() {
-            hoverFocus = (Button b) => {
+            grabFocus = (Component b) => {
                 menus[currentMenu].Focus = b;
             };
-            hoverAction = (Button b) =>
-                !b.OldIsHovered && b.IsHovered ||
-                !b.HasFocus && b.IsHovered && Input.OldMouse.Position != Input.NewMouse.Position;
-            selectAction = (Button b) =>
+            hoverCondition = (Component b) =>
+                b.IsInsideClip(GuiHelper.MouseToUI());
+            hoverFocus = (Component b) =>
+                !b.OldIsHovered && b.IsHovered;
+            selectCondition = (Component b) =>
                 b.HasFocus &&
                 (Input.OldGamePad[0].Buttons.A == ButtonState.Released && Input.NewGamePad[0].Buttons.A == ButtonState.Pressed ||
                 Input.OldKeyboard.IsKeyUp(Keys.Space) && Input.NewKeyboard.IsKeyDown(Keys.Space) ||
@@ -54,10 +55,11 @@ namespace AposGameStarter
         Dictionary<MenuScreens, ComponentFocus> menus;
         MenuScreens currentMenu;
 
-        Func<Button, bool> hoverAction;
-        Action<Button> hoverFocus;
+        Func<Component, bool> hoverCondition;
+        Func<Component, bool> hoverFocus;
+        Action<Component> grabFocus;
 
-        Func<Button, bool> selectAction;
+        Func<Component, bool> selectCondition;
         Func<bool> previousFocusAction;
         Func<bool> nextFocusAction;
         Func<bool> backAction;
@@ -65,21 +67,26 @@ namespace AposGameStarter
         private ComponentFocus setupMainMenu() {
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
+            mp.AddHoverCondition(hoverCondition);
 
-            Label l1 = new Label(Assets.bitFont, "AposGameStarter");
+            Label l1 = new Label("AposGameStarter");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
 
-            mp.Add(createButtonLabel("Resume Game", (Button b) => {
+            mp.Add(createButtonLabel("Resume Game", (Component b) => {
+                return true;
             }));
-            mp.Add(createButtonLabel("Settings", (Button b) => {
+            mp.Add(createButtonLabel("Settings", (Component b) => {
                 selectMenu(MenuScreens.Settings);
+                return true;
             }));
-            mp.Add(createButtonLabel("Debug", (Button b) => {
+            mp.Add(createButtonLabel("Debug", (Component b) => {
                 selectMenu(MenuScreens.Debug);
+                return true;
             }));
-            mp.Add(createButtonLabel("Quit", (Button b) => {
+            mp.Add(createButtonLabel("Quit", (Component b) => {
                 selectMenu(MenuScreens.Quit);
+                return true;
             }));
 
             return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
@@ -87,12 +94,14 @@ namespace AposGameStarter
         private ComponentFocus setupSettingsMenu() {
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
+            mp.AddHoverCondition(hoverCondition);
 
-            Label l1 = new Label(Assets.bitFont, "Settings");
+            Label l1 = new Label("Settings");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
-            mp.Add(createButtonLabel("Back", (Button b) => {
+            mp.Add(createButtonLabel("Back", (Component b) => {
                 selectMenu(MenuScreens.Main);
+                return true;
             }));
 
             return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
@@ -100,17 +109,20 @@ namespace AposGameStarter
         private ComponentFocus setupDebugMenu() {
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
+            mp.AddHoverCondition(hoverCondition);
 
-            Label l1 = new Label(Assets.bitFont, "Debug");
+            Label l1 = new Label("Debug");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
             mp.Add(createButtonLabelDynamic(() => {
-                return "Show path line: " + (Utility.showLine ? "true" : "false");
-            }, (Button b) => {
+                return "Show path line: " + (Utility.showLine ? " true" : "false");
+            }, (Component b) => {
                 Utility.showLine = !Utility.showLine;
+                return true;
             }));
-            mp.Add(createButtonLabel("Back", (Button b) => {
+            mp.Add(createButtonLabel("Back", (Component b) => {
                 selectMenu(MenuScreens.Main);
+                return true;
             }));
             
             return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
@@ -118,15 +130,18 @@ namespace AposGameStarter
         private ComponentFocus setupQuitConfirm() {
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
+            mp.AddHoverCondition(hoverCondition);
 
-            Label l1 = new Label(Assets.bitFont, "Do you really want to quit?");
+            Label l1 = new Label("Do you really want to quit?");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
-            mp.Add(createButtonLabel("Yes", (Button b) => {
+            mp.Add(createButtonLabel("Yes", (Component b) => {
                 Utility.game.Exit();
+                return true;
             }));
-            mp.Add(createButtonLabel("No", (Button b) => {
+            mp.Add(createButtonLabel("No", (Component b) => {
                 selectMenu(MenuScreens.Main);
+                return true;
             }));
 
             return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
@@ -166,20 +181,16 @@ namespace AposGameStarter
             Component currentPanel = menus[currentMenu].RootComponent;
             GuiHelper.DrawGui(s, currentPanel);
         }
-        private Component createButtonLabel(string text, Action<Button> a) {
-            Label l = new Label(Assets.bitFont, text);
+        private Component createButtonLabel(string text, Func<Component, bool> a) {
+            Label l = new Label(text);
             l.ActiveColor = Color.White;
             l.NormalColor = new Color(150, 150, 150);
             Border border = new Border(l, 20, 20, 20, 20);
-            Button b = new Button(border);
-            b.ShowBox = false;
-            b.AddAction(selectAction, a);
-            b.AddAction(hoverAction, hoverFocus);
 
-            return b;
+            return createButton(border, a);
         }
         private Component createButtonLabel(string text) {
-            Label l = new Label(Assets.bitFont, text);
+            Label l = new Label(text);
             l.ActiveColor = Color.White;
             l.NormalColor = new Color(150, 150, 150);
             Border border = new Border(l, 20, 20, 20, 20);
@@ -188,25 +199,31 @@ namespace AposGameStarter
 
             return b;
         }
-        private Component createButtonLabelDynamic(Func<string> text, Action<Button> a) {
-            LabelDynamic ld = new LabelDynamic(Assets.bitFont, text);
+        private Component createButtonLabelDynamic(Func<string> text, Func<Component, bool> a) {
+            LabelDynamic ld = new LabelDynamic(text);
+            ld.ActiveColor = Color.White;
+            ld.NormalColor = new Color(150, 150, 150);
+            Border border = new Border(ld, 20, 20, 20, 20);
+
+            return createButton(border, a);
+        }
+        private Component createButtonLabelDynamic(Func<string> text) {
+            LabelDynamic ld = new LabelDynamic(text);
             ld.ActiveColor = Color.White;
             ld.NormalColor = new Color(150, 150, 150);
             Border border = new Border(ld, 20, 20, 20, 20);
             Button b = new Button(border);
             b.ShowBox = false;
-            b.AddAction(selectAction, a);
-            b.AddAction(hoverAction, hoverFocus);
 
             return b;
         }
-        private Component createButtonLabelDynamic(Func<string> text) {
-            LabelDynamic ld = new LabelDynamic(Assets.bitFont, text);
-            ld.ActiveColor = Color.White;
-            ld.NormalColor = new Color(150, 150, 150);
-            Border border = new Border(ld, 20, 20, 20, 20);
-            Button b = new Button(border);
+        private Component createButton(Component c, Func<Component, bool> a) {
+            Button b = new Button(c);
             b.ShowBox = false;
+            b.GrabFocus = grabFocus;
+            b.AddHoverCondition(hoverCondition);
+            b.AddAction(selectCondition, a);
+            b.AddAction(hoverFocus, (Component component) => true);
 
             return b;
         }
