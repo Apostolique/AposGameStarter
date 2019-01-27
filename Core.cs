@@ -39,7 +39,7 @@ namespace AposGameStarter
             // TODO: use this.Content to load your game content here
             Assets.LoadAssets(Content);
             GuiHelper.Window = Window;
-            GuiHelper.Scale = 2f;
+            GuiHelper.Scale = 1f;
             GuiHelper.Font = Assets.Font;
             menu = new Menu();
         }
