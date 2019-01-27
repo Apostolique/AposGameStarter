@@ -25,8 +25,6 @@ namespace AposGameStarter
             // TODO: Add your initialization logic here
             Utility.game = this;
             Utility.Window = Window;
-            GuiHelper.Window = Window;
-            GuiHelper.Scale = 1f;
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += WindowClientChanged;
@@ -40,6 +38,8 @@ namespace AposGameStarter
 
             // TODO: use this.Content to load your game content here
             Assets.LoadAssets(Content);
+            GuiHelper.Window = Window;
+            GuiHelper.Scale = 2f;
             GuiHelper.Font = Assets.Font;
             menu = new Menu();
         }
