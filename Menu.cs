@@ -99,6 +99,25 @@ namespace AposGameStarter
             Label l1 = new Label("Settings");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             mp.Add(l1Border);
+            mp.Add(createLabelDynamic(() => {
+                return "[Current UI scale: " + GuiHelper.Scale + "x]";
+            }));
+            mp.Add(createButtonLabel("UI Scale 1x", (Component b) => {
+                GuiHelper.Scale = 1f;
+                return true;
+            }));
+            mp.Add(createButtonLabel("UI Scale 2x", (Component b) => {
+                GuiHelper.Scale = 2f;
+                return true;
+            }));
+            mp.Add(createButtonLabel("UI Scale 3x", (Component b) => {
+                GuiHelper.Scale = 3f;
+                return true;
+            }));
+            mp.Add(createButtonLabel("UI Scale 4x", (Component b) => {
+                GuiHelper.Scale = 4f;
+                return true;
+            }));
             mp.Add(createButtonLabel("Back", (Component b) => {
                 selectMenu(MenuScreens.Main);
                 return true;
@@ -207,15 +226,13 @@ namespace AposGameStarter
 
             return createButton(border, a);
         }
-        private Component createButtonLabelDynamic(Func<string> text) {
+        private Component createLabelDynamic(Func<string> text) {
             LabelDynamic ld = new LabelDynamic(text);
             ld.ActiveColor = Color.White;
             ld.NormalColor = new Color(150, 150, 150);
             Border border = new Border(ld, 20, 20, 20, 20);
-            Button b = new Button(border);
-            b.ShowBox = false;
 
-            return b;
+            return border;
         }
         private Component createButton(Component c, Func<Component, bool> a) {
             Button b = new Button(c);
