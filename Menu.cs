@@ -103,19 +103,19 @@ namespace AposGameStarter
                 return "[Current UI scale: " + GuiHelper.Scale + "x]";
             }));
             mp.Add(createButtonLabel("UI Scale 1x", (Component b) => {
-                GuiHelper.Scale = 1f;
+                GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 1f;});
                 return true;
             }));
             mp.Add(createButtonLabel("UI Scale 2x", (Component b) => {
-                GuiHelper.Scale = 2f;
+                GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 2f;});
                 return true;
             }));
             mp.Add(createButtonLabel("UI Scale 3x", (Component b) => {
-                GuiHelper.Scale = 3f;
+                GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 3f;});
                 return true;
             }));
             mp.Add(createButtonLabel("UI Scale 4x", (Component b) => {
-                GuiHelper.Scale = 4f;
+                GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 4f;});
                 return true;
             }));
             mp.Add(createButtonLabel("Back", (Component b) => {
@@ -171,13 +171,13 @@ namespace AposGameStarter
 
         public void UpdateSetup() {
             foreach (KeyValuePair<MenuScreens, ComponentFocus> kvp in menus) {
-                kvp.Value.RootComponent.UpdateSetup();
+                kvp.Value.UpdateSetup();
             }
         }
         public void UpdateInput() {
             ComponentFocus currentPanel = menus[currentMenu];
 
-            bool usedInput = currentPanel.UpdateInput();
+            bool usedInput = false;
 
             if (backAction()) {
                 if (currentMenu == MenuScreens.Main) {
@@ -189,7 +189,7 @@ namespace AposGameStarter
             }
 
             if (!usedInput) {
-                usedInput = currentPanel.RootComponent.UpdateInput();
+                usedInput = currentPanel.UpdateInput();
             }
         }
         public void Update() {
