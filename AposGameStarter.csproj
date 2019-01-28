@@ -4,14 +4,15 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="**\*.mgcb" />
+    <MonoGameContentReference Include="**\*.mgcb"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AposGui" Version="0.6.9" />
-    <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.4" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
-    <PackageReference Include="MonoGame.Extended" Version="1.1.0" />
-    <PackageReference Include="MonoGame.Extended.Content.Pipeline" Version="1.1.0" />
-    <PackageReference Include="SpriteFontPlus.MonoGame" Version="0.6.1.11" />
+    <PackageReference Include="AposGui" Version="0.6.9"/>
+    <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.4"/>
+    <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7"/>
+    <PackageReference Include="MonoGame.Extended" Version="1.1.0"/>
+    <PackageReference Include="MonoGame.Extended.Content.Pipeline" Version="1.1.0"/>
+    <PackageReference Include="SpriteFontPlus.MonoGame" Version="0.6.1.11"/>
+    <PackageReference Include="Optional" Version="4.0.0"/>
   </ItemGroup>
 </Project>
