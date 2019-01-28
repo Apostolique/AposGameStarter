@@ -41,6 +41,7 @@ namespace AposGameStarter
             GuiHelper.Window = Window;
             GuiHelper.Scale = 1f;
             GuiHelper.Font = Assets.Font;
+            GuiHelper.FontSize = 30;
             menu = new Menu();
         }
 
