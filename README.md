@@ -14,4 +14,4 @@ _____
 
 Example menu made with the GUI code:
 
-<img src="https://i.imgur.com/BNAdvZ5.gif" alt="Apos GUI Loop" width="800" height="480" />
+<img src="Images/Showcase.gif" alt="Apos GUI Loop" width="800" height="480" />
