@@ -7,7 +7,7 @@
     <MonoGameContentReference Include="**\*.mgcb"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AposGui" Version="0.6.9"/>
+    <PackageReference Include="AposGui" Version="0.6.10"/>
     <PackageReference Include="MonoGame.Content.Builder" Version="3.7.0.4"/>
     <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7"/>
     <PackageReference Include="MonoGame.Extended" Version="1.1.0"/>
