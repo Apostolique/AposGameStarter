@@ -200,31 +200,13 @@ namespace AposGameStarter
             Component currentPanel = menus[currentMenu].RootComponent;
             GuiHelper.DrawGui(s, currentPanel);
         }
-        private Component createButtonLabel(string text, Func<Component, bool> a) {
+        private Component createLabel(string text) {
             Label l = new Label(text);
             l.ActiveColor = Color.White;
             l.NormalColor = new Color(150, 150, 150);
             Border border = new Border(l, 20, 20, 20, 20);
 
-            return createButton(border, a);
-        }
-        private Component createButtonLabel(string text) {
-            Label l = new Label(text);
-            l.ActiveColor = Color.White;
-            l.NormalColor = new Color(150, 150, 150);
-            Border border = new Border(l, 20, 20, 20, 20);
-            Button b = new Button(border);
-            b.ShowBox = false;
-
-            return b;
-        }
-        private Component createButtonLabelDynamic(Func<string> text, Func<Component, bool> a) {
-            LabelDynamic ld = new LabelDynamic(text);
-            ld.ActiveColor = Color.White;
-            ld.NormalColor = new Color(150, 150, 150);
-            Border border = new Border(ld, 20, 20, 20, 20);
-
-            return createButton(border, a);
+            return border;
         }
         private Component createLabelDynamic(Func<string> text) {
             LabelDynamic ld = new LabelDynamic(text);
@@ -233,6 +215,22 @@ namespace AposGameStarter
             Border border = new Border(ld, 20, 20, 20, 20);
 
             return border;
+        }
+        private Component createButtonLabel(string text, Func<Component, bool> a) {
+            Label l = new Label(text);
+            l.ActiveColor = Color.White;
+            l.NormalColor = new Color(150, 150, 150);
+            Border border = new Border(l, 20, 20, 20, 20);
+
+            return createButton(border, a);
+        }
+        private Component createButtonLabelDynamic(Func<string> text, Func<Component, bool> a) {
+            LabelDynamic ld = new LabelDynamic(text);
+            ld.ActiveColor = Color.White;
+            ld.NormalColor = new Color(150, 150, 150);
+            Border border = new Border(ld, 20, 20, 20, 20);
+
+            return createButton(border, a);
         }
         private Component createButton(Component c, Func<Component, bool> a) {
             Button b = new Button(c);
