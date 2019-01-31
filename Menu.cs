@@ -27,8 +27,8 @@ namespace AposGameStarter
                 b.HasFocus &&
                 (Input.OldGamePad[0].Buttons.A == ButtonState.Released && Input.NewGamePad[0].Buttons.A == ButtonState.Pressed ||
                 Input.OldKeyboard.IsKeyUp(Keys.Space) && Input.NewKeyboard.IsKeyDown(Keys.Space) ||
-                Input.OldKeyboard.IsKeyUp(Keys.Enter) && Input.NewKeyboard.IsKeyDown(Keys.Enter) ||
-                b.IsHovered && Input.OldMouse.LeftButton == ButtonState.Pressed && Input.NewMouse.LeftButton == ButtonState.Released);
+                Input.OldKeyboard.IsKeyUp(Keys.Enter) && Input.NewKeyboard.IsKeyDown(Keys.Enter)) ||
+                b.IsHovered && Input.OldMouse.LeftButton == ButtonState.Pressed && Input.NewMouse.LeftButton == ButtonState.Released;
             previousFocusAction = () =>
                 Input.OldGamePad[0].ThumbSticks.Left.Y <= 0 && Input.NewGamePad[0].ThumbSticks.Left.Y > 0 ||
                 Input.OldKeyboard.IsKeyUp(Keys.Up) && Input.NewKeyboard.IsKeyDown(Keys.Up);
@@ -174,7 +174,10 @@ namespace AposGameStarter
             return p;
         }
         private void selectMenu(MenuScreens key) {
-            GuiHelper.NextLoopActions.Add(() => {menuSwitch.Key = Option.Some(key);});
+            GuiHelper.NextLoopActions.Add(() => {
+                menuSwitch.Key = Option.Some(key);
+                menuFocus.Focus = menuSwitch;
+            });
         }
 
         public void UpdateSetup() {
