@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using Optional;
 
 namespace AposGameStarter
 {
@@ -16,7 +17,7 @@ namespace AposGameStarter
     {
         public Menu() {
             grabFocus = (Component b) => {
-                menus[currentMenu].Focus = b;
+                menuFocus.Focus = b;
             };
             hoverCondition = (Component b) =>
                 b.IsInsideClip(GuiHelper.MouseToUI());
@@ -38,11 +39,18 @@ namespace AposGameStarter
                 Input.OldGamePad[0].Buttons.B == ButtonState.Released && Input.NewGamePad[0].Buttons.B == ButtonState.Pressed ||
                 Input.OldKeyboard.IsKeyUp(Keys.Escape) && Input.NewKeyboard.IsKeyDown(Keys.Escape);
 
-            menus = new Dictionary<MenuScreens, ComponentFocus>();
-            menus.Add(MenuScreens.Main, setupMainMenu());
-            menus.Add(MenuScreens.Settings, setupSettingsMenu());
-            menus.Add(MenuScreens.Debug, setupDebugMenu());
-            menus.Add(MenuScreens.Quit, setupQuitConfirm());
+            MenuPanel mp = new MenuPanel();
+            mp.Layout = new LayoutVerticalCenter();
+            menuSwitch = new Switcher<MenuScreens>();
+
+            menuSwitch.Add(MenuScreens.Main, setupMainMenu());
+            menuSwitch.Add(MenuScreens.Settings, setupSettingsMenu());
+            menuSwitch.Add(MenuScreens.Debug, setupDebugMenu());
+            menuSwitch.Add(MenuScreens.Quit, setupQuitConfirm());
+
+            mp.Add(menuSwitch);
+
+            menuFocus = new ComponentFocus(mp, previousFocusAction, nextFocusAction);
 
             selectMenu(MenuScreens.Main);
         }
@@ -52,8 +60,8 @@ namespace AposGameStarter
             Debug,
             Quit
         }
-        Dictionary<MenuScreens, ComponentFocus> menus;
-        MenuScreens currentMenu;
+        ComponentFocus menuFocus;
+        Switcher<MenuScreens> menuSwitch;
 
         Func<Component, bool> hoverCondition;
         Func<Component, bool> hoverFocus;
@@ -64,123 +72,120 @@ namespace AposGameStarter
         Func<bool> nextFocusAction;
         Func<bool> backAction;
 
-        private ComponentFocus setupMainMenu() {
-            MenuPanel mp = new MenuPanel();
-            mp.Layout = new LayoutVerticalCenter();
-            mp.AddHoverCondition(hoverCondition);
+        private Component setupMainMenu() {
+            Panel p = new PanelVerticalScroll();
+            p.Layout = new LayoutVerticalCenter();
+            p.AddHoverCondition(hoverCondition);
 
             Label l1 = new Label("AposGameStarter");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
-            mp.Add(l1Border);
+            p.Add(l1Border);
 
-            mp.Add(createButtonLabel("Resume Game", (Component b) => {
+            p.Add(createButtonLabel("Resume Game", (Component b) => {
                 return true;
             }));
-            mp.Add(createButtonLabel("Settings", (Component b) => {
+            p.Add(createButtonLabel("Settings", (Component b) => {
                 selectMenu(MenuScreens.Settings);
                 return true;
             }));
-            mp.Add(createButtonLabel("Debug", (Component b) => {
+            p.Add(createButtonLabel("Debug", (Component b) => {
                 selectMenu(MenuScreens.Debug);
                 return true;
             }));
-            mp.Add(createButtonLabel("Quit", (Component b) => {
+            p.Add(createButtonLabel("Quit", (Component b) => {
                 selectMenu(MenuScreens.Quit);
                 return true;
             }));
 
-            return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
+            return p;
         }
-        private ComponentFocus setupSettingsMenu() {
-            MenuPanel mp = new MenuPanel();
-            mp.Layout = new LayoutVerticalCenter();
-            mp.AddHoverCondition(hoverCondition);
+        private Component setupSettingsMenu() {
+            Panel p = new PanelVerticalScroll();
+            p.Layout = new LayoutVerticalCenter();
+            p.AddHoverCondition(hoverCondition);
 
             Label l1 = new Label("Settings");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
-            mp.Add(l1Border);
-            mp.Add(createLabelDynamic(() => {
+            p.Add(l1Border);
+            p.Add(createLabelDynamic(() => {
                 return "[Current UI scale: " + GuiHelper.Scale + "x]";
             }));
-            mp.Add(createButtonLabel("UI Scale 1x", (Component b) => {
+            p.Add(createButtonLabel("UI Scale 1x", (Component b) => {
                 GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 1f;});
                 return true;
             }));
-            mp.Add(createButtonLabel("UI Scale 2x", (Component b) => {
+            p.Add(createButtonLabel("UI Scale 2x", (Component b) => {
                 GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 2f;});
                 return true;
             }));
-            mp.Add(createButtonLabel("UI Scale 3x", (Component b) => {
+            p.Add(createButtonLabel("UI Scale 3x", (Component b) => {
                 GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 3f;});
                 return true;
             }));
-            mp.Add(createButtonLabel("UI Scale 4x", (Component b) => {
+            p.Add(createButtonLabel("UI Scale 4x", (Component b) => {
                 GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 4f;});
                 return true;
             }));
-            mp.Add(createButtonLabel("Back", (Component b) => {
+            p.Add(createButtonLabel("Back", (Component b) => {
                 selectMenu(MenuScreens.Main);
                 return true;
             }));
 
-            return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
+            return p;
         }
-        private ComponentFocus setupDebugMenu() {
-            MenuPanel mp = new MenuPanel();
-            mp.Layout = new LayoutVerticalCenter();
-            mp.AddHoverCondition(hoverCondition);
+        private Component setupDebugMenu() {
+            Panel p = new PanelVerticalScroll();
+            p.Layout = new LayoutVerticalCenter();
+            p.AddHoverCondition(hoverCondition);
 
             Label l1 = new Label("Debug");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
-            mp.Add(l1Border);
-            mp.Add(createButtonLabelDynamic(() => {
+            p.Add(l1Border);
+            p.Add(createButtonLabelDynamic(() => {
                 return "Show path line: " + (Utility.showLine ? " true" : "false");
             }, (Component b) => {
                 Utility.showLine = !Utility.showLine;
                 return true;
             }));
-            mp.Add(createButtonLabel("Back", (Component b) => {
+            p.Add(createButtonLabel("Back", (Component b) => {
                 selectMenu(MenuScreens.Main);
                 return true;
             }));
             
-            return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
+            return p;
         }
-        private ComponentFocus setupQuitConfirm() {
-            MenuPanel mp = new MenuPanel();
-            mp.Layout = new LayoutVerticalCenter();
-            mp.AddHoverCondition(hoverCondition);
+        private Component setupQuitConfirm() {
+            Panel p = new PanelVerticalScroll();
+            p.Layout = new LayoutVerticalCenter();
+            p.AddHoverCondition(hoverCondition);
 
             Label l1 = new Label("Do you really want to quit?");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
-            mp.Add(l1Border);
-            mp.Add(createButtonLabel("Yes", (Component b) => {
+            p.Add(l1Border);
+            p.Add(createButtonLabel("Yes", (Component b) => {
                 Utility.game.Exit();
                 return true;
             }));
-            mp.Add(createButtonLabel("No", (Component b) => {
+            p.Add(createButtonLabel("No", (Component b) => {
                 selectMenu(MenuScreens.Main);
                 return true;
             }));
 
-            return new ComponentFocus(mp, previousFocusAction, nextFocusAction);
+            return p;
         }
-        private void selectMenu(MenuScreens ms) {
-            currentMenu = ms;
+        private void selectMenu(MenuScreens key) {
+            GuiHelper.NextLoopActions.Add(() => {menuSwitch.Key = Option.Some(key);});
         }
 
         public void UpdateSetup() {
-            foreach (KeyValuePair<MenuScreens, ComponentFocus> kvp in menus) {
-                kvp.Value.UpdateSetup();
-            }
+            GuiHelper.UpdateSetup();
+            menuFocus.UpdateSetup();
         }
         public void UpdateInput() {
-            ComponentFocus currentPanel = menus[currentMenu];
-
             bool usedInput = false;
 
             if (backAction()) {
-                if (currentMenu == MenuScreens.Main) {
+                if (menuSwitch.Key == Option.Some(MenuScreens.Main)) {
                     selectMenu(MenuScreens.Quit);
                 } else {
                     selectMenu(MenuScreens.Main);
@@ -189,16 +194,14 @@ namespace AposGameStarter
             }
 
             if (!usedInput) {
-                usedInput = currentPanel.UpdateInput();
+                usedInput = menuFocus.UpdateInput();
             }
         }
         public void Update() {
-            Component currentPanel = menus[currentMenu].RootComponent;
-            currentPanel.Update();
+            menuFocus.Update();
         }
         public void DrawUI(SpriteBatch s) {
-            Component currentPanel = menus[currentMenu].RootComponent;
-            GuiHelper.DrawGui(s, currentPanel);
+            menuFocus.Draw(s);
         }
         private Component createLabel(string text) {
             Label l = new Label(text);
@@ -242,7 +245,7 @@ namespace AposGameStarter
 
             return b;
         }
-        private class MenuPanel : PanelVerticalScroll {
+        private class MenuPanel : Panel {
             public MenuPanel() {
             }
             public override bool UpdateInput() {
