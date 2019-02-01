@@ -1,4 +1,5 @@
 using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
@@ -13,9 +14,7 @@ namespace AposGameStarter
         }
         public static void LoadFonts(ContentManager Content) {
             Font = DynamicSpriteFont.FromTtf(File.ReadAllBytes(Content.RootDirectory + "/Fonts/SourceCodePro-Medium.ttf"), 30);
-            Font2 = Content.Load<SpriteFont>("Fonts/SourceCodePro");
         }
         public static DynamicSpriteFont Font;
-        public static SpriteFont Font2;
     }
 }

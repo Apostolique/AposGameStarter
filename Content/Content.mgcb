@@ -17,10 +17,3 @@
 #begin Fonts/SourceCodePro-Medium.ttf
 /copy:Fonts/SourceCodePro-Medium.ttf
 
-#begin Fonts/SourceCodePro.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/SourceCodePro.spritefont
-
