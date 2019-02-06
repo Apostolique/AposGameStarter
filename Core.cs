@@ -1,5 +1,6 @@
 ﻿using System;
 using Apos.Gui;
+using Apos.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -38,6 +39,7 @@ namespace AposGameStarter
 
             // TODO: use this.Content to load your game content here
             Assets.LoadAssets(Content);
+            InputHelper.Game = this;
             GuiHelper.Window = Window;
             GuiHelper.Scale = 1f;
             GuiHelper.Font = Assets.Font;
@@ -50,7 +52,7 @@ namespace AposGameStarter
 
         protected override void Update(GameTime gameTime)
         {
-            Input.Update();
+            InputHelper.Update();
 
             // TODO: Add your update logic here
             menu.UpdateSetup();

@@ -19,25 +19,6 @@ namespace AposGameStarter
             grabFocus = (Component b) => {
                 menuFocus.Focus = b;
             };
-            hoverCondition = (Component b) =>
-                b.IsInsideClip(GuiHelper.MouseToUI());
-            hoverFocus = (Component b) =>
-                !b.OldIsHovered && b.IsHovered;
-            selectCondition = (Component b) =>
-                b.HasFocus &&
-                (Input.OldGamePad[0].Buttons.A == ButtonState.Released && Input.NewGamePad[0].Buttons.A == ButtonState.Pressed ||
-                Input.OldKeyboard.IsKeyUp(Keys.Space) && Input.NewKeyboard.IsKeyDown(Keys.Space) ||
-                Input.OldKeyboard.IsKeyUp(Keys.Enter) && Input.NewKeyboard.IsKeyDown(Keys.Enter)) ||
-                b.IsHovered && Input.OldMouse.LeftButton == ButtonState.Pressed && Input.NewMouse.LeftButton == ButtonState.Released;
-            previousFocusAction = () =>
-                Input.OldGamePad[0].ThumbSticks.Left.Y <= 0 && Input.NewGamePad[0].ThumbSticks.Left.Y > 0 ||
-                Input.OldKeyboard.IsKeyUp(Keys.Up) && Input.NewKeyboard.IsKeyDown(Keys.Up);
-            nextFocusAction = () =>
-                Input.OldGamePad[0].ThumbSticks.Left.Y >= 0 && Input.NewGamePad[0].ThumbSticks.Left.Y < 0 ||
-                Input.OldKeyboard.IsKeyUp(Keys.Down) && Input.NewKeyboard.IsKeyDown(Keys.Down);
-            backAction = () =>
-                Input.OldGamePad[0].Buttons.B == ButtonState.Released && Input.NewGamePad[0].Buttons.B == ButtonState.Pressed ||
-                Input.OldKeyboard.IsKeyUp(Keys.Escape) && Input.NewKeyboard.IsKeyDown(Keys.Escape);
 
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
@@ -50,7 +31,7 @@ namespace AposGameStarter
 
             mp.Add(menuSwitch);
 
-            menuFocus = new ComponentFocus(mp, previousFocusAction, nextFocusAction);
+            menuFocus = new ComponentFocus(mp, Default.ConditionPreviousFocus, Default.ConditionNextFocus);
 
             selectMenu(MenuScreens.Main);
         }
@@ -63,46 +44,39 @@ namespace AposGameStarter
         ComponentFocus menuFocus;
         Switcher<MenuScreens> menuSwitch;
 
-        Func<Component, bool> hoverCondition;
-        Func<Component, bool> hoverFocus;
         Action<Component> grabFocus;
-
-        Func<Component, bool> selectCondition;
-        Func<bool> previousFocusAction;
-        Func<bool> nextFocusAction;
-        Func<bool> backAction;
 
         private Component setupMainMenu() {
             Panel p = new PanelVerticalScroll();
             p.Layout = new LayoutVerticalCenter();
-            p.AddHoverCondition(hoverCondition);
+            p.AddHoverCondition(Default.ConditionHoverMouse);
 
             Label l1 = new Label("AposGameStarter");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             p.Add(l1Border);
 
-            p.Add(createButtonLabel("Resume Game", (Component b) => {
+            p.Add(Default.CreateButton("Resume Game", (Component b) => {
                 return true;
-            }));
-            p.Add(createButtonLabel("Settings", (Component b) => {
+            }, grabFocus));
+            p.Add(Default.CreateButton("Settings", (Component b) => {
                 selectMenu(MenuScreens.Settings);
                 return true;
-            }));
-            p.Add(createButtonLabel("Debug", (Component b) => {
+            }, grabFocus));
+            p.Add(Default.CreateButton("Debug", (Component b) => {
                 selectMenu(MenuScreens.Debug);
                 return true;
-            }));
-            p.Add(createButtonLabel("Quit", (Component b) => {
+            }, grabFocus));
+            p.Add(Default.CreateButton("Quit", (Component b) => {
                 selectMenu(MenuScreens.Quit);
                 return true;
-            }));
+            }, grabFocus));
 
             return p;
         }
         private Component setupSettingsMenu() {
             Panel p = new PanelVerticalScroll();
             p.Layout = new LayoutVerticalCenter();
-            p.AddHoverCondition(hoverCondition);
+            p.AddHoverCondition(Default.ConditionHoverMouse);
 
             Label l1 = new Label("Settings");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
@@ -110,66 +84,66 @@ namespace AposGameStarter
             p.Add(createLabelDynamic(() => {
                 return "[Current UI scale: " + GuiHelper.Scale + "x]";
             }));
-            p.Add(createButtonLabel("UI Scale 1x", (Component b) => {
+            p.Add(Default.CreateButton("UI Scale 1x", (Component b) => {
                 GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 1f;});
                 return true;
-            }));
-            p.Add(createButtonLabel("UI Scale 2x", (Component b) => {
+            }, grabFocus));
+            p.Add(Default.CreateButton("UI Scale 2x", (Component b) => {
                 GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 2f;});
                 return true;
-            }));
-            p.Add(createButtonLabel("UI Scale 3x", (Component b) => {
+            }, grabFocus));
+            p.Add(Default.CreateButton("UI Scale 3x", (Component b) => {
                 GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 3f;});
                 return true;
-            }));
-            p.Add(createButtonLabel("UI Scale 4x", (Component b) => {
+            }, grabFocus));
+            p.Add(Default.CreateButton("UI Scale 4x", (Component b) => {
                 GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 4f;});
                 return true;
-            }));
-            p.Add(createButtonLabel("Back", (Component b) => {
+            }, grabFocus));
+            p.Add(Default.CreateButton("Back", (Component b) => {
                 selectMenu(MenuScreens.Main);
                 return true;
-            }));
+            }, grabFocus));
 
             return p;
         }
         private Component setupDebugMenu() {
             Panel p = new PanelVerticalScroll();
             p.Layout = new LayoutVerticalCenter();
-            p.AddHoverCondition(hoverCondition);
+            p.AddHoverCondition(Default.ConditionHoverMouse);
 
             Label l1 = new Label("Debug");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             p.Add(l1Border);
-            p.Add(createButtonLabelDynamic(() => {
+            p.Add(Default.CreateButton(() => {
                 return "Show path line: " + (Utility.showLine ? " true" : "false");
             }, (Component b) => {
                 Utility.showLine = !Utility.showLine;
                 return true;
-            }));
-            p.Add(createButtonLabel("Back", (Component b) => {
+            }, grabFocus));
+            p.Add(Default.CreateButton("Back", (Component b) => {
                 selectMenu(MenuScreens.Main);
                 return true;
-            }));
+            }, grabFocus));
             
             return p;
         }
         private Component setupQuitConfirm() {
             Panel p = new PanelVerticalScroll();
             p.Layout = new LayoutVerticalCenter();
-            p.AddHoverCondition(hoverCondition);
+            p.AddHoverCondition(Default.ConditionHoverMouse);
 
             Label l1 = new Label("Do you really want to quit?");
             Border l1Border = new Border(l1, 30, 30, 30, 50);
             p.Add(l1Border);
-            p.Add(createButtonLabel("Yes", (Component b) => {
+            p.Add(Default.CreateButton("Yes", (Component b) => {
                 Utility.game.Exit();
                 return true;
-            }));
-            p.Add(createButtonLabel("No", (Component b) => {
+            }, grabFocus));
+            p.Add(Default.CreateButton("No", (Component b) => {
                 selectMenu(MenuScreens.Main);
                 return true;
-            }));
+            }, grabFocus));
 
             return p;
         }
@@ -187,7 +161,7 @@ namespace AposGameStarter
         public void UpdateInput() {
             bool usedInput = false;
 
-            if (backAction()) {
+            if (Default.ConditionBackFocus()) {
                 if (menuSwitch.Key == Option.Some(MenuScreens.Main)) {
                     selectMenu(MenuScreens.Quit);
                 } else {
@@ -222,32 +196,7 @@ namespace AposGameStarter
 
             return border;
         }
-        private Component createButtonLabel(string text, Func<Component, bool> a) {
-            Label l = new Label(text);
-            l.ActiveColor = Color.White;
-            l.NormalColor = new Color(150, 150, 150);
-            Border border = new Border(l, 20, 20, 20, 20);
 
-            return createButton(border, a);
-        }
-        private Component createButtonLabelDynamic(Func<string> text, Func<Component, bool> a) {
-            LabelDynamic ld = new LabelDynamic(text);
-            ld.ActiveColor = Color.White;
-            ld.NormalColor = new Color(150, 150, 150);
-            Border border = new Border(ld, 20, 20, 20, 20);
-
-            return createButton(border, a);
-        }
-        private Component createButton(Component c, Func<Component, bool> a) {
-            Button b = new Button(c);
-            b.ShowBox = false;
-            b.GrabFocus = grabFocus;
-            b.AddHoverCondition(hoverCondition);
-            b.AddAction(selectCondition, a);
-            b.AddAction(hoverFocus, (Component component) => true);
-
-            return b;
-        }
         private class MenuPanel : Panel {
             public MenuPanel() {
             }
