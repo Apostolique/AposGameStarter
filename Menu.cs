@@ -51,9 +51,7 @@ namespace AposGameStarter
             p.Layout = new LayoutVerticalCenter();
             p.AddHoverCondition(Default.ConditionHoverMouse);
 
-            Label l1 = new Label("AposGameStarter");
-            Border l1Border = new Border(l1, 30, 30, 30, 50);
-            p.Add(l1Border);
+            p.Add(createTitle("AposGameStarter"));
 
             p.Add(Default.CreateButton("Resume Game", (Component b) => {
                 return true;
@@ -78,9 +76,7 @@ namespace AposGameStarter
             p.Layout = new LayoutVerticalCenter();
             p.AddHoverCondition(Default.ConditionHoverMouse);
 
-            Label l1 = new Label("Settings");
-            Border l1Border = new Border(l1, 30, 30, 30, 50);
-            p.Add(l1Border);
+            p.Add(createTitle("Settings"));
             p.Add(createLabelDynamic(() => {
                 return "[Current UI scale: " + GuiHelper.Scale + "x]";
             }));
@@ -112,9 +108,7 @@ namespace AposGameStarter
             p.Layout = new LayoutVerticalCenter();
             p.AddHoverCondition(Default.ConditionHoverMouse);
 
-            Label l1 = new Label("Debug");
-            Border l1Border = new Border(l1, 30, 30, 30, 50);
-            p.Add(l1Border);
+            p.Add(createTitle("Debug"));
             p.Add(Default.CreateButton(() => {
                 return "Show path line: " + (Utility.showLine ? " true" : "false");
             }, (Component b) => {
@@ -133,9 +127,7 @@ namespace AposGameStarter
             p.Layout = new LayoutVerticalCenter();
             p.AddHoverCondition(Default.ConditionHoverMouse);
 
-            Label l1 = new Label("Do you really want to quit?");
-            Border l1Border = new Border(l1, 30, 30, 30, 50);
-            p.Add(l1Border);
+            p.Add(createTitle("Do you really want to quit?"));
             p.Add(Default.CreateButton("Yes", (Component b) => {
                 Utility.game.Exit();
                 return true;
@@ -180,11 +172,9 @@ namespace AposGameStarter
         public void DrawUI(SpriteBatch s) {
             menuFocus.Draw(s);
         }
-        private Component createLabel(string text) {
+        private Component createTitle(string text) {
             Label l = new Label(text);
-            l.ActiveColor = Color.White;
-            l.NormalColor = new Color(150, 150, 150);
-            Border border = new Border(l, 20, 20, 20, 20);
+            Border border = new Border(l, 20, 20, 20, 50);
 
             return border;
         }
