@@ -52,13 +52,14 @@ namespace AposGameStarter
 
         protected override void Update(GameTime gameTime)
         {
-            InputHelper.Update();
+            InputHelper.UpdateSetup();
 
             // TODO: Add your update logic here
             menu.UpdateSetup();
             menu.UpdateInput();
             menu.Update();
 
+            InputHelper.Update();
             base.Update(gameTime);
         }
 
