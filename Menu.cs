@@ -47,9 +47,10 @@ namespace AposGameStarter
         Action<Component> grabFocus;
 
         private Component setupMainMenu() {
-            Panel p = new PanelVerticalScroll();
+            Panel p = new Panel();
             p.Layout = new LayoutVerticalCenter();
             p.AddHoverCondition(Default.ConditionHoverMouse);
+            p.AddAction(Default.IsScrolled, Default.ScrollVertically);
 
             p.Add(createTitle("AposGameStarter"));
 
@@ -72,9 +73,10 @@ namespace AposGameStarter
             return p;
         }
         private Component setupSettingsMenu() {
-            Panel p = new PanelVerticalScroll();
+            Panel p = new Panel();
             p.Layout = new LayoutVerticalCenter();
             p.AddHoverCondition(Default.ConditionHoverMouse);
+            p.AddAction(Default.IsScrolled, Default.ScrollVertically);
 
             p.Add(createTitle("Settings"));
             p.Add(createLabelDynamic(() => {
@@ -104,9 +106,10 @@ namespace AposGameStarter
             return p;
         }
         private Component setupDebugMenu() {
-            Panel p = new PanelVerticalScroll();
+            Panel p = new Panel();
             p.Layout = new LayoutVerticalCenter();
             p.AddHoverCondition(Default.ConditionHoverMouse);
+            p.AddAction(Default.IsScrolled, Default.ScrollVertically);
 
             p.Add(createTitle("Debug"));
             p.Add(Default.CreateButton(() => {
@@ -123,9 +126,10 @@ namespace AposGameStarter
             return p;
         }
         private Component setupQuitConfirm() {
-            Panel p = new PanelVerticalScroll();
+            Panel p = new Panel();
             p.Layout = new LayoutVerticalCenter();
             p.AddHoverCondition(Default.ConditionHoverMouse);
+            p.AddAction(Default.IsScrolled, Default.ScrollVertically);
 
             p.Add(createTitle("Do you really want to quit?"));
             p.Add(Default.CreateButton("Yes", (Component b) => {
