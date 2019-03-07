@@ -191,18 +191,13 @@ namespace AposGameStarter
             return border;
         }
 
-        private class MenuPanel : Panel {
+        private class MenuPanel : ScreenPanel {
             public MenuPanel() {
-            }
-            public override bool UpdateInput() {
-                bool used = base.UpdateInput();
-                return used || IsInsideClip(GuiHelper.MouseToUI());
             }
 
             public override void Draw(SpriteBatch s) {
                 SetScissor(s);
                 s.FillRectangle(BoundingRect, Color.Black * 0.6f);
-                //s.FillRectangle(new Rectangle(0, 0, 100, 100), Color.Black * 0.6f);
 
                 s.DrawLine(Left, Top, Right, Top, Color.Black, 2);
                 s.DrawLine(Right, Top, Right, Bottom, Color.Black, 2);
@@ -212,8 +207,6 @@ namespace AposGameStarter
                 base.Draw(s);
                 ResetScissor(s);
             }
-            public override int Width => GuiHelper.WindowWidth;
-            public override int Height => GuiHelper.WindowHeight;
         }
     }
 }
