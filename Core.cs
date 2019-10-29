@@ -45,6 +45,7 @@ namespace AposGameStarter {
 
         protected override void Update(GameTime gameTime) {
             InputHelper.UpdateSetup();
+            GuiHelper.UpdateSetup();
 
             // TODO: Add your update logic here
             menu.UpdateSetup();

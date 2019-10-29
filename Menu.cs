@@ -146,7 +146,6 @@ namespace AposGameStarter {
         }
 
         public void UpdateSetup() {
-            GuiHelper.UpdateSetup();
             menuFocus.UpdateSetup();
         }
         public void UpdateInput() {
