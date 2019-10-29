@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Apos.Gui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using Optional;
 
-namespace AposGameStarter
-{
+namespace AposGameStarter {
     /// <summary>
-    /// Goal: Interface to modify the game settings.
+    /// Interface to modify the game settings.
     /// </summary>
-    class Menu
-    {
+    class Menu {
         public Menu() {
             grabFocus = (Component b) => {
                 menuFocus.Focus = b;
@@ -83,19 +78,19 @@ namespace AposGameStarter
                 return "[Current UI scale: " + GuiHelper.Scale + "x]";
             }));
             p.Add(Default.CreateButton("UI Scale 1x", (Component b) => {
-                GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 1f;});
+                GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 1f; });
                 return true;
             }, grabFocus));
             p.Add(Default.CreateButton("UI Scale 2x", (Component b) => {
-                GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 2f;});
+                GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 2f; });
                 return true;
             }, grabFocus));
             p.Add(Default.CreateButton("UI Scale 3x", (Component b) => {
-                GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 3f;});
+                GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 3f; });
                 return true;
             }, grabFocus));
             p.Add(Default.CreateButton("UI Scale 4x", (Component b) => {
-                GuiHelper.NextLoopActions.Add(() => {GuiHelper.Scale = 4f;});
+                GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 4f; });
                 return true;
             }, grabFocus));
             p.Add(Default.CreateButton("Back", (Component b) => {
@@ -113,16 +108,16 @@ namespace AposGameStarter
 
             p.Add(createTitle("Debug"));
             p.Add(Default.CreateButton(() => {
-                return "Show path line: " + (Utility.showLine ? " true" : "false");
+                return "Show path line: " + (Utility.ShowLine ? " true" : "false");
             }, (Component b) => {
-                Utility.showLine = !Utility.showLine;
+                Utility.ShowLine = !Utility.ShowLine;
                 return true;
             }, grabFocus));
             p.Add(Default.CreateButton("Back", (Component b) => {
                 selectMenu(MenuScreens.Main);
                 return true;
             }, grabFocus));
-            
+
             return p;
         }
         private Component setupQuitConfirm() {
@@ -133,7 +128,7 @@ namespace AposGameStarter
 
             p.Add(createTitle("Do you really want to quit?"));
             p.Add(Default.CreateButton("Yes", (Component b) => {
-                Utility.game.Exit();
+                Utility.Game.Exit();
                 return true;
             }, grabFocus));
             p.Add(Default.CreateButton("No", (Component b) => {
@@ -192,8 +187,7 @@ namespace AposGameStarter
         }
 
         private class MenuPanel : ScreenPanel {
-            public MenuPanel() {
-            }
+            public MenuPanel() { }
 
             public override void Draw(SpriteBatch s) {
                 SetScissor(s);

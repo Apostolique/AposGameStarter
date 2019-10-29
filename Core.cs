@@ -3,28 +3,23 @@ using Apos.Gui;
 using Apos.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace AposGameStarter
-{
-    public class Core : Game
-    {
+namespace AposGameStarter {
+    public class Core : Game {
         GraphicsDeviceManager graphics;
         SpriteBatch s;
 
         Menu menu;
 
-        public Core()
-        {
+        public Core() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
-        protected override void Initialize()
-        {
+        protected override void Initialize() {
             // TODO: Add your initialization logic here
-            Utility.game = this;
+            Utility.Game = this;
             Utility.Window = Window;
 
             Window.AllowUserResizing = true;
@@ -33,8 +28,7 @@ namespace AposGameStarter
             base.Initialize();
         }
 
-        protected override void LoadContent()
-        {
+        protected override void LoadContent() {
             s = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
@@ -47,11 +41,9 @@ namespace AposGameStarter
             menu = new Menu();
         }
 
-        private void WindowClientChanged(object sender, EventArgs e) {
-        }
+        private void WindowClientChanged(object sender, EventArgs e) { }
 
-        protected override void Update(GameTime gameTime)
-        {
+        protected override void Update(GameTime gameTime) {
             InputHelper.UpdateSetup();
 
             // TODO: Add your update logic here
@@ -59,12 +51,11 @@ namespace AposGameStarter
             menu.UpdateInput();
             menu.Update();
 
-            InputHelper.Update();
+            InputHelper.UpdateCleanup();
             base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
-        {
+        protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
