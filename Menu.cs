@@ -11,8 +11,8 @@ namespace AposGameStarter {
     /// </summary>
     class Menu {
         public Menu() {
-            grabFocus = (Component b) => {
-                menuFocus.Focus = b;
+            grabFocus = c => {
+                menuFocus.Focus = c;
             };
 
             MenuPanel mp = new MenuPanel();
@@ -49,18 +49,18 @@ namespace AposGameStarter {
 
             p.Add(createTitle("AposGameStarter"));
 
-            p.Add(Default.CreateButton("Resume Game", (Component b) => {
+            p.Add(Default.CreateButton("Resume Game", c => {
                 return true;
             }, grabFocus));
-            p.Add(Default.CreateButton("Settings", (Component b) => {
+            p.Add(Default.CreateButton("Settings", c => {
                 selectMenu(MenuScreens.Settings);
                 return true;
             }, grabFocus));
-            p.Add(Default.CreateButton("Debug", (Component b) => {
+            p.Add(Default.CreateButton("Debug", c => {
                 selectMenu(MenuScreens.Debug);
                 return true;
             }, grabFocus));
-            p.Add(Default.CreateButton("Quit", (Component b) => {
+            p.Add(Default.CreateButton("Quit", c => {
                 selectMenu(MenuScreens.Quit);
                 return true;
             }, grabFocus));
@@ -77,23 +77,23 @@ namespace AposGameStarter {
             p.Add(createLabelDynamic(() => {
                 return "[Current UI scale: " + GuiHelper.Scale + "x]";
             }));
-            p.Add(Default.CreateButton("UI Scale 1x", (Component b) => {
+            p.Add(Default.CreateButton("UI Scale 1x", c => {
                 GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 1f; });
                 return true;
             }, grabFocus));
-            p.Add(Default.CreateButton("UI Scale 2x", (Component b) => {
+            p.Add(Default.CreateButton("UI Scale 2x", c => {
                 GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 2f; });
                 return true;
             }, grabFocus));
-            p.Add(Default.CreateButton("UI Scale 3x", (Component b) => {
+            p.Add(Default.CreateButton("UI Scale 3x", c => {
                 GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 3f; });
                 return true;
             }, grabFocus));
-            p.Add(Default.CreateButton("UI Scale 4x", (Component b) => {
+            p.Add(Default.CreateButton("UI Scale 4x", c => {
                 GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 4f; });
                 return true;
             }, grabFocus));
-            p.Add(Default.CreateButton("Back", (Component b) => {
+            p.Add(Default.CreateButton("Back", c => {
                 selectMenu(MenuScreens.Main);
                 return true;
             }, grabFocus));
@@ -109,11 +109,11 @@ namespace AposGameStarter {
             p.Add(createTitle("Debug"));
             p.Add(Default.CreateButton(() => {
                 return "Show path line: " + (Utility.ShowLine ? " true" : "false");
-            }, (Component b) => {
+            }, c => {
                 Utility.ShowLine = !Utility.ShowLine;
                 return true;
             }, grabFocus));
-            p.Add(Default.CreateButton("Back", (Component b) => {
+            p.Add(Default.CreateButton("Back", c => {
                 selectMenu(MenuScreens.Main);
                 return true;
             }, grabFocus));
@@ -127,11 +127,11 @@ namespace AposGameStarter {
             p.AddAction(Default.IsScrolled, Default.ScrollVertically);
 
             p.Add(createTitle("Do you really want to quit?"));
-            p.Add(Default.CreateButton("Yes", (Component b) => {
+            p.Add(Default.CreateButton("Yes", c => {
                 Utility.Game.Exit();
                 return true;
             }, grabFocus));
-            p.Add(Default.CreateButton("No", (Component b) => {
+            p.Add(Default.CreateButton("No", c => {
                 selectMenu(MenuScreens.Main);
                 return true;
             }, grabFocus));
