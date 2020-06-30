@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using SpriteFontPlus;
 
-namespace AposGameStarter {
+namespace GameProject {
     static class Assets {
         public static void LoadAssets(ContentManager Content) {
             LoadFonts(Content);

@@ -2,14 +2,69 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "buildCore",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/AposGameStarter.csproj"
+                "${workspaceFolder}/Platforms/Core/Core.csproj"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "buildDirectX",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Platforms/DirectX/DirectX.csproj"
+            ],
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "buildPipeline",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Platforms/Pipeline/Pipeline.csproj"
+            ],
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "publishCore",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/Core/Core.csproj",
+                "-c",
+                "Release"
+            ],
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "publishDirectX",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/DirectX/DirectX.csproj",
+                "-c",
+                "Release"
+            ],
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/Core/Core.csproj"
+            ],
+            "problemMatcher": "$tsc"
         }
     ]
 }

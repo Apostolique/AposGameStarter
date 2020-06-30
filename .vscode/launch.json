@@ -5,24 +5,43 @@
    "version": "0.2.0",
    "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": "Run Core platform",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "buildCore",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/AposGameStarter.dll",
+            "program": "${workspaceFolder}/Platforms/Core/bin/Debug/netcoreapp3.1/AposGameStarter.dll",
             "args": [],
+            "cwd": "${workspaceFolder}/Platforms/Core",
+            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Run DirectX platform",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildDirectX",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Platforms/DirectX/bin/Debug/netcoreapp3.1/AposGameStarter.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Platforms/DirectX",
+            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Run Pipeline",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildPipeline",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Platforms/Pipeline/bin/Debug/netcoreapp3.1/Pipeline.dll",
+            "args": ["-i", "Game/Assets", "-r", "Platforms/Pipeline/bin", "-o", "Assets", "-l", "Game/Layer1"],
             "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
             "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
+            "stopAtEntry": false
         }
-    ,]
+    ]
 }

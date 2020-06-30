@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.4.3" />
+    <PackageReference Include="Apos.Content.Compile" Version="0.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Game\Pipeline\**\*.cs">
+      <Link>Pipeline\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Game\Layer0\**\*.cs">
+      <Link>Layer0\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+  </ItemGroup>
+
+</Project>

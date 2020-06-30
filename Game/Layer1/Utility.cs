@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 
-namespace AposGameStarter {
+namespace GameProject {
     static class Utility {
-        public static Core Game;
+        public static Game Game;
         public static GameWindow Window;
 
         public static int WindowWidth => Window.ClientBounds.Width;

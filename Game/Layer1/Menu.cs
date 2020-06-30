@@ -1,11 +1,10 @@
 ﻿using System;
 using Apos.Gui;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using Optional;
 
-namespace AposGameStarter {
+namespace GameProject {
     /// <summary>
     /// Interface to modify the game settings.
     /// </summary>
@@ -26,7 +25,7 @@ namespace AposGameStarter {
 
             mp.Add(menuSwitch);
 
-            menuFocus = new ComponentFocus(mp, Default.ConditionPreviousFocus, Default.ConditionNextFocus);
+            menuFocus = new ComponentFocus(mp, Default.ConditionPrevFocus, Default.ConditionNextFocus);
 
             selectMenu(MenuScreens.Main);
         }
@@ -167,8 +166,8 @@ namespace AposGameStarter {
         public void Update() {
             menuFocus.Update();
         }
-        public void DrawUI(SpriteBatch s) {
-            menuFocus.Draw(s);
+        public void DrawUI() {
+            menuFocus.Draw();
         }
         private Component createTitle(string text) {
             Label l = new Label(text);
@@ -188,17 +187,17 @@ namespace AposGameStarter {
         private class MenuPanel : ScreenPanel {
             public MenuPanel() { }
 
-            public override void Draw(SpriteBatch s) {
-                SetScissor(s);
-                s.FillRectangle(BoundingRect, Color.Black * 0.6f);
+            public override void Draw() {
+                SetScissor();
+                _s.FillRectangle(BoundingRect, Color.Black * 0.6f);
 
-                s.DrawLine(Left, Top, Right, Top, Color.Black, 2);
-                s.DrawLine(Right, Top, Right, Bottom, Color.Black, 2);
-                s.DrawLine(Left, Bottom, Right, Bottom, Color.Black, 2);
-                s.DrawLine(Left, Top, Left, Bottom, Color.Black, 2);
+                _s.DrawLine(Left, Top, Right, Top, Color.Black, 2);
+                _s.DrawLine(Right, Top, Right, Bottom, Color.Black, 2);
+                _s.DrawLine(Left, Bottom, Right, Bottom, Color.Black, 2);
+                _s.DrawLine(Left, Top, Left, Bottom, Color.Black, 2);
 
-                base.Draw(s);
-                ResetScissor(s);
+                base.Draw();
+                ResetScissor();
             }
         }
     }
