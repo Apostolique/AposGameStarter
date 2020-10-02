@@ -15,7 +15,7 @@
     <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />
     <PackageReference Include="MonoGame.Extended" Version="3.7.0" />
     <PackageReference Include="Apos.Content.Read" Version="0.1.1" />
-    <PackageReference Include="Apos.Gui" Version="0.14.2" />
+    <PackageReference Include="Apos.Gui" Version="0.14.3" />
   </ItemGroup>
 
   <ItemGroup>
