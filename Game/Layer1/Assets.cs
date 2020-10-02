@@ -9,11 +9,7 @@ namespace GameProject {
             LoadFonts(Content);
         }
         public static void LoadFonts(ContentManager Content) {
-            using MemoryStream ms = new MemoryStream();
-            TitleContainer.OpenStream($"{Content.RootDirectory}/Fonts/SourceCodePro-Medium.ttf").CopyTo(ms);
-            byte[] fontBytes = ms.ToArray();
-
-            Font = DynamicSpriteFont.FromTtf(fontBytes, 30);
+            Font = DynamicSpriteFont.FromTtf(TitleContainer.OpenStream($"{Content.RootDirectory}/Fonts/SourceCodePro-Medium.ttf"), 30);
         }
         public static DynamicSpriteFont Font;
     }
