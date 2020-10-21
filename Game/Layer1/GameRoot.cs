@@ -24,8 +24,8 @@ namespace GameProject {
         protected override void LoadContent() {
             _s = new SpriteBatch(GraphicsDevice);
 
-            Assets.LoadAssets(Content);
-            GuiHelper.Setup(this, Assets.Font);
+            Assets.LoadAssets(Content, GraphicsDevice);
+            GuiHelper.Setup(this, Assets.FontSystem);
             _menu = new Menu();
         }
 
