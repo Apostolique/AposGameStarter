@@ -5,7 +5,7 @@ namespace GameProject {
     static class Utility {
         public static Settings Settings;
         public static Game Game;
-        public static GameWindow Window;
+        public static GameWindow Window => Game.Window;
         public static GraphicsDeviceManager Graphics {
             get;
             set;

@@ -14,7 +14,6 @@ namespace GameProject {
         protected override void Initialize() {
             Utility.Settings = new Settings();
             Utility.Game = this;
-            Utility.Window = Window;
             Utility.Graphics = _graphics;
 
             _graphics.PreferredBackBufferWidth = Utility.Settings.Width;
