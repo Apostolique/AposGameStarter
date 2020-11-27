@@ -76,6 +76,25 @@ namespace GameProject {
             p.Add(createLabelDynamic(() => {
                 return "[Current UI scale: " + GuiHelper.Scale + "x]";
             }));
+            p.Add(Default.CreateButton(() => {
+                return $"FullScreen: {(Utility.Settings.IsFullScreen ? " true" : "false")}";
+            }, c => {
+                GuiHelper.NextLoopActions.Add(() => { Utility.ToggleFullscreen(); });
+                return true;
+            }, grabFocus));
+            p.Add(Default.CreateButton(() => {
+                return $"Borderless: {(Utility.Settings.IsBorderless ? " true" : "false")}";
+            }, c => {
+                GuiHelper.NextLoopActions.Add(() => {
+                    Utility.Settings.IsBorderless = !Utility.Settings.IsBorderless;
+                    //Toggle twice to handle the borderless change.
+                    Utility.ToggleFullscreen();
+                    if (!Utility.Settings.IsFullScreen) {
+                        Utility.ToggleFullscreen();
+                    }
+                });
+                return true;
+            }, grabFocus));
             p.Add(Default.CreateButton("UI Scale 1x", c => {
                 GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 1f; });
                 return true;
