@@ -10,9 +10,7 @@ namespace GameProject {
     /// </summary>
     class Menu {
         public Menu() {
-            grabFocus = c => {
-                menuFocus.Focus = c;
-            };
+            menuFocus = new ComponentFocus(Default.ConditionPrevFocus, Default.ConditionNextFocus);
 
             MenuPanel mp = new MenuPanel();
             mp.Layout = new LayoutVerticalCenter();
@@ -25,7 +23,7 @@ namespace GameProject {
 
             mp.Add(menuSwitch);
 
-            menuFocus = new ComponentFocus(mp, Default.ConditionPrevFocus, Default.ConditionNextFocus);
+            menuFocus.Root = mp;
 
             selectMenu(MenuScreens.Main);
         }
@@ -38,38 +36,31 @@ namespace GameProject {
         ComponentFocus menuFocus;
         Switcher<MenuScreens> menuSwitch;
 
-        Action<Component> grabFocus;
-
         private Component setupMainMenu() {
             Panel p = new Panel();
             p.Layout = new LayoutVerticalCenter();
-            p.AddHoverCondition(Default.ConditionHoverMouse);
+            p.AddHoverCondition(Default.ConditionMouseHover);
             p.AddAction(Default.IsScrolled, Default.ScrollVertically);
 
             p.Add(createTitle("AposGameStarter"));
 
-            p.Add(Default.CreateButton("Resume Game", c => {
-                return true;
-            }, grabFocus));
+            p.Add(Default.CreateButton("Resume Game", c => { }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("Settings", c => {
                 selectMenu(MenuScreens.Settings);
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("Debug", c => {
                 selectMenu(MenuScreens.Debug);
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("Quit", c => {
                 selectMenu(MenuScreens.Quit);
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
 
             return p;
         }
         private Component setupSettingsMenu() {
             Panel p = new Panel();
             p.Layout = new LayoutVerticalCenter();
-            p.AddHoverCondition(Default.ConditionHoverMouse);
+            p.AddHoverCondition(Default.ConditionMouseHover);
             p.AddAction(Default.IsScrolled, Default.ScrollVertically);
 
             p.Add(createTitle("Settings"));
@@ -80,8 +71,7 @@ namespace GameProject {
                 return $"FullScreen: {(Utility.Settings.IsFullScreen ? " true" : "false")}";
             }, c => {
                 GuiHelper.NextLoopActions.Add(() => { Utility.ToggleFullscreen(); });
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton(() => {
                 return $"Borderless: {(Utility.Settings.IsBorderless ? " true" : "false")}";
             }, c => {
@@ -93,35 +83,29 @@ namespace GameProject {
                         Utility.ToggleFullscreen();
                     }
                 });
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("UI Scale 1x", c => {
                 GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 1f; });
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("UI Scale 2x", c => {
                 GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 2f; });
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("UI Scale 3x", c => {
                 GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 3f; });
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("UI Scale 4x", c => {
                 GuiHelper.NextLoopActions.Add(() => { GuiHelper.Scale = 4f; });
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("Back", c => {
                 selectMenu(MenuScreens.Main);
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
 
             return p;
         }
         private Component setupDebugMenu() {
             Panel p = new Panel();
             p.Layout = new LayoutVerticalCenter();
-            p.AddHoverCondition(Default.ConditionHoverMouse);
+            p.AddHoverCondition(Default.ConditionMouseHover);
             p.AddAction(Default.IsScrolled, Default.ScrollVertically);
 
             p.Add(createTitle("Debug"));
@@ -129,30 +113,26 @@ namespace GameProject {
                 return "Show path line: " + (Utility.ShowLine ? " true" : "false");
             }, c => {
                 Utility.ShowLine = !Utility.ShowLine;
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("Back", c => {
                 selectMenu(MenuScreens.Main);
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
 
             return p;
         }
         private Component setupQuitConfirm() {
             Panel p = new Panel();
             p.Layout = new LayoutVerticalCenter();
-            p.AddHoverCondition(Default.ConditionHoverMouse);
+            p.AddHoverCondition(Default.ConditionMouseHover);
             p.AddAction(Default.IsScrolled, Default.ScrollVertically);
 
             p.Add(createTitle("Do you really want to quit?"));
             p.Add(Default.CreateButton("Yes", c => {
                 Utility.Game.Exit();
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("No", c => {
                 selectMenu(MenuScreens.Main);
-                return true;
-            }, grabFocus));
+            }, menuFocus.GrabFocus));
 
             return p;
         }
@@ -167,20 +147,15 @@ namespace GameProject {
             menuFocus.UpdateSetup();
         }
         public void UpdateInput() {
-            bool usedInput = false;
-
             if (Default.ConditionBackFocus()) {
                 if (menuSwitch.Key == Option.Some(MenuScreens.Main)) {
                     selectMenu(MenuScreens.Quit);
                 } else {
                     selectMenu(MenuScreens.Main);
                 }
-                usedInput = true;
             }
 
-            if (!usedInput) {
-                usedInput = menuFocus.UpdateInput();
-            }
+            menuFocus.UpdateInput();
         }
         public void Update() {
             menuFocus.Update();

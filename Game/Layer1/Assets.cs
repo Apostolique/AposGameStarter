@@ -10,11 +10,8 @@ namespace GameProject {
             LoadFonts(Content, graphicsDevice);
         }
         public static void LoadFonts(ContentManager Content, GraphicsDevice graphicsDevice) {
-            using MemoryStream ms = new MemoryStream();
-            TitleContainer.OpenStream($"{Content.RootDirectory}/Fonts/SourceCodePro-Medium.ttf").CopyTo(ms);
-            byte[] fontBytes = ms.ToArray();
-
-            FontSystem = FontSystemFactory.Create(graphicsDevice, fontBytes, 2048, 2048);
+            FontSystem = FontSystemFactory.Create(graphicsDevice, 2048, 2048);
+            FontSystem.AddFont(TitleContainer.OpenStream($"{Content.RootDirectory}/Fonts/SourceCodePro-Medium.ttf"));
         }
         public static FontSystem FontSystem;
     }
