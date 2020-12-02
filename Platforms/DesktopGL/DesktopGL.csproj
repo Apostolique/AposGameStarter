@@ -15,28 +15,14 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
     <PackageReference Include="MonoGame.Extended" Version="3.7.0" />
-    <PackageReference Include="Apos.Content.Read" Version="0.1.1" />
     <PackageReference Include="Apos.Gui" Version="0.16.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Game\Layer0\**\*.cs">
+    <Compile Include="..\..\Game\**\*.cs">
       <Link>Layer0\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\Game\Layer1\**\*.cs">
-      <Link>Layer1\%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </Compile>
-  </ItemGroup>
-
-  <Target Name="Build Content" BeforeTargets="BeforeBuild">
-    <Exec Condition="'$(Configuration)'=='debug'"
-          Command="dotnet run -p ../Pipeline -- -i ../../Game/Assets -r $(OutputPath) -o Assets -l ../../Game/Layer1" />
-    <Exec Condition="'$(Configuration)'=='release'"
-          Command="dotnet run -p ../Pipeline -- -i ../../Game/Assets -r $(PublishDir) -o Assets -l ../../Game/Layer1" />
-  </Target>
 
   <ItemGroup>
     <MonoGameContentReference Include="..\..\Game\Content\**\*.mgcb">

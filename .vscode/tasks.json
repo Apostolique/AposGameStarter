@@ -22,22 +22,12 @@
             "problemMatcher": "$tsc"
         },
         {
-            "label": "buildPipeline",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/Platforms/Pipeline/Pipeline.csproj"
-            ],
-            "problemMatcher": "$tsc"
-        },
-        {
             "label": "publishDesktopGL",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/DesktopGL/DesktopGL.csproj",
+                "${workspaceFolder}/Platforms/DesktopGL/DesktopGL.csproj",
                 "-c",
                 "Release"
             ],
@@ -49,7 +39,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}WindowsDXXWindowsDXX.csproj",
+                "${workspaceFolder}/Platforms/WindowsDX/WindowsDX.csproj",
                 "-c",
                 "Release"
             ],
