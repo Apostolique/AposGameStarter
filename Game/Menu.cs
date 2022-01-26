@@ -2,7 +2,6 @@
 using Apos.Gui;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
-using Optional;
 
 namespace GameProject {
     /// <summary>
@@ -68,7 +67,7 @@ namespace GameProject {
                 return "[Current UI scale: " + GuiHelper.Scale + "x]";
             }));
             p.Add(Default.CreateButton(() => {
-                return $"FullScreen: {(Utility.Settings.IsFullScreen ? " true" : "false")}";
+                return $"FullScreen: {(Utility.Settings.IsFullscreen ? " true" : "false")}";
             }, c => {
                 GuiHelper.NextLoopActions.Add(() => { Utility.ToggleFullscreen(); });
             }, menuFocus.GrabFocus));
@@ -76,12 +75,7 @@ namespace GameProject {
                 return $"Borderless: {(Utility.Settings.IsBorderless ? " true" : "false")}";
             }, c => {
                 GuiHelper.NextLoopActions.Add(() => {
-                    Utility.Settings.IsBorderless = !Utility.Settings.IsBorderless;
-                    //Toggle twice to handle the borderless change.
-                    Utility.ToggleFullscreen();
-                    if (!Utility.Settings.IsFullScreen) {
-                        Utility.ToggleFullscreen();
-                    }
+                    Utility.ToggleBorderless();
                 });
             }, menuFocus.GrabFocus));
             p.Add(Default.CreateButton("UI Scale 1x", c => {
@@ -138,7 +132,7 @@ namespace GameProject {
         }
         private void selectMenu(MenuScreens key) {
             GuiHelper.NextLoopActions.Add(() => {
-                menuSwitch.Key = Option.Some(key);
+                menuSwitch.Key = Optional.Option.Some(key);
                 menuFocus.Focus = menuSwitch;
             });
         }
@@ -148,7 +142,7 @@ namespace GameProject {
         }
         public void UpdateInput() {
             if (Default.ConditionBackFocus()) {
-                if (menuSwitch.Key == Option.Some(MenuScreens.Main)) {
+                if (menuSwitch.Key == Optional.Option.Some(MenuScreens.Main)) {
                     selectMenu(MenuScreens.Quit);
                 } else {
                     selectMenu(MenuScreens.Main);

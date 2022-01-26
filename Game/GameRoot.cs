@@ -12,13 +12,19 @@ namespace GameProject {
         }
 
         protected override void Initialize() {
-            Utility.Settings = new Settings();
+            Utility.Settings = Utility.EnsureJson<Settings>("Settings.json");
             Utility.Game = this;
             Utility.Graphics = _graphics;
 
-            _graphics.PreferredBackBufferWidth = Utility.Settings.Width;
-            _graphics.PreferredBackBufferHeight = Utility.Settings.Height;
-            _graphics.ApplyChanges();
+            IsFixedTimeStep = Utility.Settings.IsFixedTimeStep;
+            _graphics.SynchronizeWithVerticalRetrace = Utility.Settings.IsVSync;
+
+            Utility.Settings.IsFullscreen = Utility.Settings.IsFullscreen || Utility.Settings.IsBorderless;
+
+            Utility.RestoreWindow();
+            if (Utility.Settings.IsFullscreen) {
+                Utility.ApplyFullscreenChange(false);
+            }
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += WindowClientChanged;
@@ -34,10 +40,27 @@ namespace GameProject {
             _menu = new Menu();
         }
 
-        private void WindowClientChanged(object sender, EventArgs e) { }
+        protected override void UnloadContent() {
+            Utility.SaveJson<Settings>("Settings.json", Utility.Settings);
+
+            base.UnloadContent();
+        }
+
+        private void WindowClientChanged(object sender, EventArgs e) {
+            if (!Utility.Settings.IsFullscreen) {
+                Utility.SaveWindow();
+            }
+        }
 
         protected override void Update(GameTime gameTime) {
             GuiHelper.UpdateSetup();
+
+            if (Triggers.ToggleFullscreen.Pressed()) {
+                Utility.ToggleFullscreen();
+            }
+            if (Triggers.ToggleBorderless.Pressed()) {
+                Utility.ToggleBorderless();
+            }
 
             _menu.UpdateSetup();
             _menu.UpdateInput();

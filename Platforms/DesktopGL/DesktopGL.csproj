@@ -2,8 +2,10 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6</TargetFramework>
     <AssemblyName>AposGameStarter</AssemblyName>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
     <MonoGamePlatform>DesktopGl</MonoGamePlatform>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishReadyToRun>false</PublishReadyToRun>
@@ -14,19 +16,19 @@
   <ItemGroup>
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
-    <PackageReference Include="MonoGame.Extended" Version="3.7.0" />
-    <PackageReference Include="Apos.Gui" Version="0.16.2" />
+    <PackageReference Include="MonoGame.Extended" Version="3.8.0" />
+    <PackageReference Include="Apos.Gui" Version="0.16.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Game\**\*.cs">
-      <Link>Layer0\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <Compile Include="../../Game/**/*.cs">
+      <Link>Layer0/%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <MonoGameContentReference Include="..\..\Game\Content\**\*.mgcb">
-      <Link>Content\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <MonoGameContentReference Include="../../Game/Content/**/*.mgcb">
+      <Link>Content/%(RecursiveDir)%(Filename)%(Extension)</Link>
     </MonoGameContentReference>
   </ItemGroup>
 

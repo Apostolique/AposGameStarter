@@ -20,41 +20,6 @@
                 "${workspaceFolder}/Platforms/WindowsDX/WindowsDX.csproj"
             ],
             "problemMatcher": "$tsc"
-        },
-        {
-            "label": "publishDesktopGL",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/Platforms/DesktopGL/DesktopGL.csproj",
-                "-c",
-                "Release"
-            ],
-            "problemMatcher": "$tsc"
-        },
-        {
-            "label": "publishWindowsDX",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/Platforms/WindowsDX/WindowsDX.csproj",
-                "-c",
-                "Release"
-            ],
-            "problemMatcher": "$tsc"
-        },
-        {
-            "label": "watch",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "${workspaceFolder}/DesktopGL/DesktopGL.csproj"
-            ],
-            "problemMatcher": "$tsc"
         }
     ]
 }
