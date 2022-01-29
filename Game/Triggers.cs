@@ -9,10 +9,5 @@ namespace GameProject {
                 new KeyboardCondition(Keys.Enter)
             );
         public static ICondition ToggleBorderless = new KeyboardCondition(Keys.F11);
-
-        public static ICondition Back = new AnyCondition(
-            new KeyboardCondition(Keys.Escape),
-            new AnyGamePadCondition(GamePadButton.Back)
-        );
     }
 }

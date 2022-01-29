@@ -28,7 +28,7 @@ namespace GameProject {
         }
 
         public void UpdateInput() {
-            if (Triggers.Back.Pressed()) {
+            if (Default.Back.Pressed()) {
                 if (_screen == MenuScreens.Main) {
                     _screen = MenuScreens.Quit;
                 } else {
@@ -65,16 +65,16 @@ namespace GameProject {
                 Utility.ToggleBorderless();
             }
             if (Button.Put("UI Scale 1x").Clicked) {
-                GuiHelper.Scale = 1f;
+                QueueScale(1f);
             }
             if (Button.Put("UI Scale 2x").Clicked) {
-                GuiHelper.Scale = 2f;
+                QueueScale(2f);
             }
             if (Button.Put("UI Scale 3x").Clicked) {
-                GuiHelper.Scale = 3f;
+                QueueScale(3f);
             }
             if (Button.Put("UI Scale 4x").Clicked) {
-                GuiHelper.Scale = 4f;
+                QueueScale(4f);
             }
             if (Button.Put("Back").Clicked) {
                 _screen = MenuScreens.Main;
@@ -99,6 +99,12 @@ namespace GameProject {
             if (Button.Put("No").Clicked) {
                 _screen = MenuScreens.Main;
             }
+        }
+
+        private void QueueScale(float scale) {
+            GuiHelper.CurrentIMGUI.QueueNextTick(() => {
+                GuiHelper.Scale = scale;
+            });
         }
 
         private class MenuUI : MenuPanel {
