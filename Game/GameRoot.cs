@@ -13,8 +13,8 @@ namespace GameProject {
 
         protected override void Initialize() {
             Utility.Settings = Utility.EnsureJson<Settings>("Settings.json");
-            Utility.Game = this;
             Utility.Graphics = _graphics;
+            Utility.Window = Window;
 
             IsFixedTimeStep = Utility.Settings.IsFixedTimeStep;
             _graphics.SynchronizeWithVerticalRetrace = Utility.Settings.IsVSync;
@@ -37,6 +37,8 @@ namespace GameProject {
 
             Assets.LoadAssets(Content, GraphicsDevice);
             GuiHelper.Setup(this, Assets.FontSystem);
+
+            _ui = new IMGUI();
             _menu = new Menu();
         }
 
@@ -53,7 +55,10 @@ namespace GameProject {
         }
 
         protected override void Update(GameTime gameTime) {
-            GuiHelper.UpdateSetup();
+            GuiHelper.UpdateSetup(gameTime);
+            _ui.UpdateAll(gameTime);
+
+            _menu.CreateMenu();
 
             if (Triggers.ToggleFullscreen.Pressed()) {
                 Utility.ToggleFullscreen();
@@ -62,9 +67,7 @@ namespace GameProject {
                 Utility.ToggleBorderless();
             }
 
-            _menu.UpdateSetup();
             _menu.UpdateInput();
-            _menu.Update();
 
             GuiHelper.UpdateCleanup();
             base.Update(gameTime);
@@ -73,7 +76,7 @@ namespace GameProject {
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.Black);
 
-            _menu.DrawUI();
+            _ui.Draw(gameTime);
 
             base.Draw(gameTime);
         }
@@ -81,6 +84,7 @@ namespace GameProject {
         GraphicsDeviceManager _graphics;
         SpriteBatch _s;
 
+        IMGUI _ui;
         Menu _menu;
     }
 }

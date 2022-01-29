@@ -1,15 +1,15 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using Apos.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject {
     static class Utility {
-        public static Settings Settings;
-        public static Game Game;
-        public static GameWindow Window => Game.Window;
+        public static Settings Settings { get; set; }
         public static GraphicsDeviceManager Graphics { get; set; }
+        public static GameWindow Window { get; set; }
 
         public static bool ShowLine = false;
 
