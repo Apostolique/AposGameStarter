@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Apos.Gui;
 using Apos.Input;
 using Microsoft.Xna.Framework;
@@ -117,6 +118,35 @@ namespace GameProject {
                 GuiHelper.PopScissor();
 
                 base.Draw(gameTime);
+            }
+
+            public static new MenuUI Push([CallerLineNumber] int id = 0, bool isAbsoluteId = false) {
+                // 1. Check if ScreenPanel with id already exists.
+                //      a. If already exists. Get it.
+                //      b  If not, create it.
+                // 3. Push it on the stack.
+                // 4. Ping it.
+                id = GuiHelper.CurrentIMGUI.CreateId(id, isAbsoluteId);
+                GuiHelper.CurrentIMGUI.TryGetValue(id, out IComponent c);
+
+                MenuUI a;
+                if (c is MenuUI) {
+                    a = (MenuUI)c;
+                } else {
+                    a = new MenuUI(id);
+                }
+
+                IParent parent = GuiHelper.CurrentIMGUI.GrabParent(a);
+
+                if (a.LastPing != InputHelper.CurrentFrame) {
+                    a.Reset();
+                    a.LastPing = InputHelper.CurrentFrame;
+                    a.Index = parent.NextIndex();
+                }
+
+                GuiHelper.CurrentIMGUI.Push(a);
+
+                return a;
             }
         }
 
