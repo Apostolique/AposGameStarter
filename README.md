@@ -1,6 +1,10 @@
 # AposGameStarter
 MonoGame project starter. Common files to help create a game faster.
 
+## Replaced
+
+This repo has been replaced by <https://github.com/Apostolique/Apos.Framework>.
+
 ## Goal
 This project will include features like:
 * simple input handling
