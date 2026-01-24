@@ -12,7 +12,7 @@ namespace GameProject {
         }
 
         protected override void Initialize() {
-            Utility.Settings = Utility.EnsureJson<Settings>("Settings.json");
+            Utility.Settings = Utility.EnsureJson("Settings.json", SettingsContext.Default.Settings);
             Utility.Graphics = _graphics;
             Utility.Window = Window;
 
@@ -43,7 +43,11 @@ namespace GameProject {
         }
 
         protected override void UnloadContent() {
-            Utility.SaveJson<Settings>("Settings.json", Utility.Settings);
+            if (!Utility.Settings.IsFullscreen) {
+                Utility.SaveWindow();
+            }
+
+            Utility.SaveJson("Settings.json", Utility.Settings, SettingsContext.Default.Settings);
 
             base.UnloadContent();
         }
@@ -56,7 +60,7 @@ namespace GameProject {
 
         protected override void Update(GameTime gameTime) {
             GuiHelper.UpdateSetup(gameTime);
-            _ui.UpdateAll(gameTime);
+            _ui.UpdateStart(gameTime);
 
             _menu.CreateMenu();
 
@@ -69,6 +73,7 @@ namespace GameProject {
 
             _menu.UpdateInput();
 
+            _ui.UpdateEnd(gameTime);
             GuiHelper.UpdateCleanup();
             base.Update(gameTime);
         }

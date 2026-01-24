@@ -13,6 +13,5 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Fonts/SourceCodePro-Medium.ttf
-/copy:Fonts/SourceCodePro-Medium.ttf
-
+#begin Fonts/source-code-pro-medium.ttf
+/copy:Fonts/source-code-pro-medium.ttf

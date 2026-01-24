@@ -1,9 +1,7 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using Apos.Gui;
 using Apos.Input;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
 
 namespace GameProject {
     /// <summary>
@@ -41,16 +39,16 @@ namespace GameProject {
         private void SetupMainMenu() {
             Label.Put("AposGameStarter", 50);
 
-            if (Button.Put("Resume Game").Clicked) {
+            if (ButtonLabel.Put("Resume Game").Clicked) {
 
             }
-            if (Button.Put("Settings").Clicked) {
+            if (ButtonLabel.Put("Settings").Clicked) {
                 _screen = MenuScreens.Settings;
             }
-            if (Button.Put("Debug").Clicked) {
+            if (ButtonLabel.Put("Debug").Clicked) {
                 _screen = MenuScreens.Debug;
             }
-            if (Button.Put("Quit").Clicked) {
+            if (ButtonLabel.Put("Quit").Clicked) {
                 _screen = MenuScreens.Quit;
             }
         }
@@ -59,62 +57,54 @@ namespace GameProject {
 
             Label.Put($"[Current UI scale: {GuiHelper.Scale}x]");
 
-            if (Button.Put($"FullScreen: {(Utility.Settings.IsFullscreen ? " true" : "false")}").Clicked) {
+            if (ButtonLabel.Put($"FullScreen: {(Utility.Settings.IsFullscreen ? " true" : "false")}").Clicked) {
                 Utility.ToggleFullscreen();
             }
-            if (Button.Put($"Borderless: {(Utility.Settings.IsBorderless ? " true" : "false")}").Clicked) {
+            if (ButtonLabel.Put($"Borderless: {(Utility.Settings.IsBorderless ? " true" : "false")}").Clicked) {
                 Utility.ToggleBorderless();
             }
-            if (Button.Put("UI Scale 1x").Clicked) {
-                QueueScale(1f);
+            if (ButtonLabel.Put("UI Scale 1x").Clicked) {
+                GuiHelper.Scale = 1f;
             }
-            if (Button.Put("UI Scale 2x").Clicked) {
-                QueueScale(2f);
+            if (ButtonLabel.Put("UI Scale 2x").Clicked) {
+                GuiHelper.Scale = 2f;
             }
-            if (Button.Put("UI Scale 3x").Clicked) {
-                QueueScale(3f);
+            if (ButtonLabel.Put("UI Scale 3x").Clicked) {
+                GuiHelper.Scale = 3f;
             }
-            if (Button.Put("UI Scale 4x").Clicked) {
-                QueueScale(4f);
+            if (ButtonLabel.Put("UI Scale 4x").Clicked) {
+                GuiHelper.Scale = 4f;
             }
-            if (Button.Put("Back").Clicked) {
+            if (ButtonLabel.Put("Back").Clicked) {
                 _screen = MenuScreens.Main;
             }
         }
         private void SetupDebugMenu() {
             Label.Put("Debug", 50);
 
-            if (Button.Put($"Show path line: {(Utility.ShowLine ? " true" : "false")}").Clicked) {
+            if (ButtonLabel.Put($"Show path line: {(Utility.ShowLine ? " true" : "false")}").Clicked) {
                 Utility.ShowLine = !Utility.ShowLine;
             }
-            if (Button.Put("Back").Clicked) {
+            if (ButtonLabel.Put("Back").Clicked) {
                 _screen = MenuScreens.Main;
             }
         }
         private void SetupQuitConfirm() {
             Label.Put("Do you really want to quit?", 50);
 
-            if (Button.Put("Yes").Clicked) {
+            if (ButtonLabel.Put("Yes").Clicked) {
                 InputHelper.Game.Exit();
             }
-            if (Button.Put("No").Clicked) {
+            if (ButtonLabel.Put("No").Clicked) {
                 _screen = MenuScreens.Main;
             }
         }
 
-        private void QueueScale(float scale) {
-            GuiHelper.CurrentIMGUI.QueueNextTick(() => {
-                GuiHelper.Scale = scale;
-            });
-        }
-
-        private class MenuUI : MenuPanel {
-            public MenuUI(int id) : base(id) { }
-
+        private class MenuUI(int id) : MenuPanel(id) {
             public override void Draw(GameTime gameTime) {
                 GuiHelper.PushScissor(Clip);
-                GuiHelper.SpriteBatch.FillRectangle(Bounds, Color.Black * 0.6f);
-                GuiHelper.SpriteBatch.DrawRectangle(Bounds, Color.Black, 2f);
+                GuiHelper.ShapeBatch.FillRectangle(Bounds.Position, Bounds.Size, Color.Black * 0.6f);
+                GuiHelper.ShapeBatch.BorderRectangle(Bounds.Position, Bounds.Size, Color.Black, 2f);
                 GuiHelper.PopScissor();
 
                 base.Draw(gameTime);
@@ -130,19 +120,13 @@ namespace GameProject {
                 GuiHelper.CurrentIMGUI.TryGetValue(id, out IComponent c);
 
                 MenuUI a;
-                if (c is MenuUI) {
-                    a = (MenuUI)c;
+                if (c is MenuUI d) {
+                    a = d;
                 } else {
                     a = new MenuUI(id);
                 }
 
-                IParent parent = GuiHelper.CurrentIMGUI.GrabParent(a);
-
-                if (a.LastPing != InputHelper.CurrentFrame) {
-                    a.Reset();
-                    a.LastPing = InputHelper.CurrentFrame;
-                    a.Index = parent.NextIndex();
-                }
+                GuiHelper.CurrentIMGUI.GrabParent(a);
 
                 GuiHelper.CurrentIMGUI.Push(a);
 
